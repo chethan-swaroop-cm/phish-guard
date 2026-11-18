@@ -26,234 +26,278 @@ from models.model_comparison import train_and_compare_models
 
 # Page Config
 st.set_page_config(
-    page_title="PHISHGUARD // CYBER THREAT RADAR",
+    page_title="PhishGuard AI — Cyber Threat Radar",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # ---------------------------------------------------------
-# FUTURISTIC CYBERPUNK / SOC COMMAND STYLING (CSS INJECTION)
+# AESTHETIC CYBER DASHBOARD STYLING & ANIMATIONS (CSS)
 # ---------------------------------------------------------
-FUTURISTIC_CSS = """
+AESTHETIC_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/* Global Reset & Futuristic Dark Palette */
+/* Master Theme Variables */
 :root {
-    --bg-primary: #070b14;
-    --bg-secondary: #0d1527;
-    --bg-glass: rgba(13, 21, 39, 0.7);
-    --border-cyan: rgba(0, 242, 254, 0.25);
-    --neon-cyan: #00f2fe;
-    --neon-blue: #4facfe;
-    --neon-red: #ff0055;
-    --neon-amber: #f59e0b;
-    --neon-green: #00ff88;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
+    --bg-main: #060913;
+    --bg-card: #0d1424;
+    --bg-card-hover: #131c31;
+    --border-color: rgba(0, 242, 254, 0.2);
+    --border-hover: rgba(0, 242, 254, 0.45);
+    --cyan: #00f2fe;
+    --blue: #3b82f6;
+    --crimson: #ff0055;
+    --amber: #f59e0b;
+    --emerald: #10b981;
+    --purple: #8b5cf6;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
 }
 
-/* Background canvas */
-.stApp {
-    background: radial-gradient(circle at 10% 20%, #0d1527 0%, #070b14 70%, #03060a 100%) !important;
-    font-family: 'Space Grotesk', -apple-system, sans-serif !important;
-    color: var(--text-primary) !important;
+/* Global Background and Typography */
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: var(--bg-main) !important;
+    background: radial-gradient(circle at 15% 15%, #0f1c38 0%, #060913 60%, #03050a 100%) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    color: var(--text-main) !important;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+/* Hide Streamlit Header Bar Artifacts */
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    backdrop-filter: blur(8px);
 }
-::-webkit-scrollbar-track {
-    background: #070b14;
-}
-::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 3px;
-    border: 1px solid var(--border-cyan);
-}
+#MainMenu, footer {visibility: hidden;}
 
-/* Sidebar Styling */
+/* Sleek Sidebar */
 [data-testid="stSidebar"] {
-    background: rgba(10, 16, 30, 0.95) !important;
-    border-right: 1px solid rgba(0, 242, 254, 0.15) !important;
-    backdrop-filter: blur(16px);
+    background: rgba(10, 15, 29, 0.96) !important;
+    border-right: 1px solid rgba(0, 242, 254, 0.12) !important;
+    backdrop-filter: blur(20px);
 }
 
-/* Futuristic HUD Header */
-.hud-header {
-    background: linear-gradient(90deg, rgba(0, 242, 254, 0.08) 0%, rgba(79, 172, 254, 0.03) 100%);
-    border: 1px solid var(--border-cyan);
-    border-left: 4px solid var(--neon-cyan);
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    box-shadow: 0 0 25px rgba(0, 242, 254, 0.08);
+/* Fix Streamlit Input Colors (No more stark white boxes!) */
+.stTextInput>div>div>input,
+.stTextArea>div>div>textarea,
+.stSelectbox>div>div {
+    background: #0d1527 !important;
+    color: #f1f5f9 !important;
+    border: 1px solid rgba(0, 242, 254, 0.25) !important;
+    border-radius: 8px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 14px !important;
+    transition: all 0.25s ease !important;
 }
-.hud-title {
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: #ffffff;
-    text-transform: uppercase;
-    font-family: 'Space Grotesk', sans-serif;
+
+.stTextInput>div>div>input:focus,
+.stTextArea>div>div>textarea:focus {
+    border-color: #00f2fe !important;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3) !important;
+}
+
+/* Fix Labels */
+label, .stSelectbox label, .stTextInput label, .stTextArea label {
+    color: #e2e8f0 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Radio Navigation Styling */
+.stRadio [role="radiogroup"] {
+    gap: 8px;
+}
+.stRadio label {
+    background: rgba(13, 21, 39, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
     display: flex;
     align-items: center;
-    gap: 12px;
+    color: #cbd5e1 !important;
+    font-size: 13px !important;
 }
-.hud-subtitle {
-    font-size: 13px;
-    color: var(--neon-cyan);
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 1px;
-    margin-top: 4px;
-}
-
-/* Pulsing Online Radar Dot */
-.pulse-indicator {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--neon-green);
-    box-shadow: 0 0 10px var(--neon-green);
-    animation: pulse 1.8s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+.stRadio label:hover {
+    border-color: rgba(0, 242, 254, 0.4) !important;
+    background: rgba(0, 242, 254, 0.08) !important;
+    color: #ffffff !important;
 }
 
-/* Glassmorphism Metric Cards */
-.cyber-card {
-    background: rgba(13, 21, 39, 0.75);
-    border: 1px solid rgba(0, 242, 254, 0.18);
-    border-radius: 10px;
-    padding: 18px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s ease;
-    margin-bottom: 16px;
-}
-.cyber-card:hover {
-    border-color: rgba(0, 242, 254, 0.45);
-    box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
-    transform: translateY(-2px);
-}
-
-/* Threat Status Banners */
-.threat-banner-critical {
-    background: linear-gradient(135deg, rgba(255, 0, 85, 0.18) 0%, rgba(255, 0, 85, 0.05) 100%);
-    border: 1px solid rgba(255, 0, 85, 0.5);
-    border-left: 6px solid #ff0055;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);
-    margin-bottom: 24px;
-}
-.threat-banner-high {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0.05) 100%);
-    border: 1px solid rgba(245, 158, 11, 0.5);
-    border-left: 6px solid #f59e0b;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
-    margin-bottom: 24px;
-}
-.threat-banner-clean {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 255, 136, 0.03) 100%);
-    border: 1px solid rgba(0, 255, 136, 0.4);
-    border-left: 6px solid #00ff88;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
-    margin-bottom: 24px;
-}
-
-/* Monospace Chip Badges */
-.badge-mono {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    display: inline-block;
-}
-.badge-critical {
-    background: rgba(255, 0, 85, 0.15);
-    color: #ff3377;
-    border: 1px solid rgba(255, 0, 85, 0.4);
-}
-.badge-safe {
-    background: rgba(0, 255, 136, 0.15);
-    color: #00ff88;
-    border: 1px solid rgba(0, 255, 136, 0.4);
-}
-.badge-amber {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.4);
-}
-.badge-cyan {
-    background: rgba(0, 242, 254, 0.15);
-    color: #00f2fe;
-    border: 1px solid rgba(0, 242, 254, 0.4);
-}
-
-/* Custom Styled Buttons */
+/* Action Button */
 .stButton>button {
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%) !important;
-    color: #050a15 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    background: linear-gradient(135deg, #00f2fe 0%, #3b82f6 100%) !important;
+    color: #020617 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 700 !important;
     font-size: 14px !important;
-    letter-spacing: 1.5px !important;
+    letter-spacing: 1px !important;
     text-transform: uppercase !important;
     border: none !important;
-    border-radius: 6px !important;
-    padding: 12px 24px !important;
-    box-shadow: 0 0 20px rgba(0, 242, 254, 0.3) !important;
-    transition: all 0.3s ease !important;
+    border-radius: 8px !important;
+    padding: 14px 28px !important;
+    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 .stButton>button:hover {
-    box-shadow: 0 0 35px rgba(0, 242, 254, 0.6) !important;
-    transform: scale(1.02) !important;
+    box-shadow: 0 6px 30px rgba(0, 242, 254, 0.6) !important;
+    transform: translateY(-2px) !important;
     color: #000000 !important;
 }
 
-/* Form Inputs */
-.stTextInput>div>div>input, .stTextArea>div>div>textarea {
-    background: rgba(13, 21, 39, 0.8) !important;
-    border: 1px solid rgba(0, 242, 254, 0.2) !important;
-    color: #f1f5f9 !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    border-radius: 6px !important;
+/* Hero Section with Animation */
+.hero-box {
+    background: linear-gradient(135deg, rgba(13, 22, 45, 0.85) 0%, rgba(9, 14, 28, 0.95) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.22);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 242, 254, 0.04);
 }
-.stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
-    border-color: var(--neon-cyan) !important;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25) !important;
+.hero-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pulseGlow 6s ease-in-out infinite alternate;
+}
+@keyframes pulseGlow {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.2); opacity: 0.9; }
 }
 
-/* Metric text enhancements */
-[data-testid="stMetricValue"] {
-    font-family: 'JetBrains Mono', monospace !important;
-    font-weight: 800 !important;
-    color: #ffffff !important;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+/* Floating animation for badge icons */
+@keyframes floatShield {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(1deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
 }
-[data-testid="stMetricLabel"] {
-    font-family: 'Space Grotesk', sans-serif !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    color: var(--text-secondary) !important;
+.floating-icon {
+    animation: floatShield 4s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* Feature Showcase Cards */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.feature-card {
+    background: rgba(13, 20, 36, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+.feature-card:hover {
+    border-color: rgba(0, 242, 254, 0.4);
+    background: rgba(13, 20, 36, 0.95);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 242, 254, 0.12);
+}
+.feature-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.feature-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Metric KPI Cards */
+.kpi-card {
+    background: rgba(13, 21, 39, 0.85);
+    border: 1px solid rgba(0, 242, 254, 0.16);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+.kpi-card:hover {
+    border-color: rgba(0, 242, 254, 0.4);
+    transform: translateY(-2px);
+}
+.kpi-title {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 6px 0 2px 0;
+}
+.kpi-sub {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Threat Alert Banners */
+.alert-banner-critical {
+    background: linear-gradient(135deg, rgba(255, 0, 85, 0.22) 0%, rgba(30, 10, 20, 0.8) 100%);
+    border: 1px solid #ff0055;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 0 35px rgba(255, 0, 85, 0.25);
+    margin-bottom: 24px;
+}
+.alert-banner-clean {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(10, 25, 20, 0.8) 100%);
+    border: 1px solid #10b981;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 0 35px rgba(16, 185, 129, 0.2);
+    margin-bottom: 24px;
+}
+.alert-banner-amber {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(25, 20, 10, 0.8) 100%);
+    border: 1px solid #f59e0b;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 0 35px rgba(245, 158, 11, 0.2);
+    margin-bottom: 24px;
+}
+
+/* Pulsing Online Radar Dot */
+.pulsing-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: dotPulse 1.5s infinite;
+}
+@keyframes dotPulse {
+    0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 </style>
 """
-st.markdown(FUTURISTIC_CSS, unsafe_allow_html=True)
+st.markdown(AESTHETIC_CSS, unsafe_allow_html=True)
 
 # Initialize DB and Models
 @st.cache_resource
@@ -270,7 +314,7 @@ def load_models():
 try:
     spam_detector, phishing_detector, url_detector = load_models()
 except Exception as e:
-    st.error(f"Error initializing models: {e}")
+    st.error(f"Error loading models: {e}")
     st.stop()
 
 # Cyber-Themed Sample Scenarios
@@ -343,40 +387,46 @@ Human Resources Division"""
     }
 }
 
-# Sidebar - SOC Command Avionics
+# ---------------------------------------------------------
+# SIDEBAR
+# ---------------------------------------------------------
 with st.sidebar:
     st.markdown("""
-        <div style="text-align: center; padding: 10px 0 16px 0;">
-            <div style="font-size: 38px;">🛡️</div>
-            <div style="font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #00f2fe; margin-top: 4px;">PHISHGUARD AI</div>
-            <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #64748b; letter-spacing: 1px;">AUTONOMOUS THREAT RADAR v2.4</div>
+        <div style="text-align: center; padding: 12px 0 16px 0;">
+            <div class="floating-icon" style="font-size: 42px;">🛡️</div>
+            <div style="font-size: 22px; font-weight: 800; letter-spacing: 1.5px; background: linear-gradient(90deg, #00f2fe, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 6px;">
+                PHISHGUARD AI
+            </div>
+            <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #64748b; letter-spacing: 1px; margin-top: 2px;">
+                CYBER THREAT RADAR v2.5
+            </div>
         </div>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("""
-        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); border-radius: 6px; padding: 8px 12px; margin-bottom: 16px;">
-            <span class="pulse-indicator"></span>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00ff88; font-weight: 600;">SOC NODE ONLINE // ACTIVE</span>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 6px 12px; margin-bottom: 20px;">
+            <span class="pulsing-dot"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #10b981; font-weight: 600;">ACTIVE DEFENSE // ONLINE</span>
         </div>
     """, unsafe_allow_html=True)
 
     nav_option = st.radio(
-        "OPERATIONAL COMMAND",
+        "NAVIGATION COMMAND",
         [
-            "🛡️ Cyber Threat Scanner",
+            "🛡️ Email Threat Scanner",
             "🔗 Tactical URL Matrix",
             "⚖️ Model Benchmarking (ML)",
             "📊 SQLite Forensic Logs",
             "⚙️ Architecture Specs"
         ]
     )
-    
+
     st.markdown("---")
-    st.markdown("<div style='font-family: \"JetBrains Mono\", monospace; font-size: 12px; color: #00f2fe; margin-bottom: 8px;'>TELEMETRY COUNTERS</div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-size: 11px; font-family: \"JetBrains Mono\", monospace; color: #00f2fe; margin-bottom: 10px; font-weight: 700;'>SECURITY TELEMETRY</div>", unsafe_allow_html=True)
     stats = get_system_stats()
     c_s1, c_s2 = st.columns(2)
     c_s1.metric("Scans Logged", stats["total_scans"])
-    c_s2.metric("Threats Quarantined", stats["phishing_count"])
+    c_s2.metric("Threats Flagged", stats["phishing_count"])
     c_s3, c_s4 = st.columns(2)
     c_s3.metric("Spam Trapped", stats["spam_count"])
     c_s4.metric("Malicious URLs", stats["malicious_urls"])
@@ -385,24 +435,53 @@ with st.sidebar:
     st.caption("Engine: TF-IDF + Naive Bayes + Logistic Regression + Random Forest + XAI Attribution")
 
 # ---------------------------------------------------------
-# VIEW 1: CYBER THREAT SCANNER
+# VIEW 1: EMAIL THREAT SCANNER
 # ---------------------------------------------------------
-if nav_option == "🛡️ Cyber Threat Scanner":
-    # Futuristic HUD Banner
-    st.markdown(f"""
-        <div class="hud-header">
-            <div class="hud-title">
-                <span>🛡️</span> EMAIL THREAT DETECTION & COMBINED FORENSICS
+if nav_option == "🛡️ Email Threat Scanner":
+    # Hero Banner with Vector Art & Visuals
+    st.markdown("""
+        <div class="hero-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 28px;">🛡️</span>
+                        <h1 style="font-size: 26px; font-weight: 800; margin: 0; color: #ffffff; letter-spacing: -0.5px;">
+                            Autonomous Email Threat Radar
+                        </h1>
+                    </div>
+                    <p style="color: #94a3b8; font-size: 14px; margin: 8px 0 0 0; max-width: 650px;">
+                        Multi-vector defensive intelligence engine. Simultaneously extracts and investigates embedded links, evaluates credential solicitation language, and calculates unified threat risk.
+                    </p>
+                </div>
+                <div style="background: rgba(0,242,254,0.06); border: 1px solid rgba(0,242,254,0.2); border-radius: 10px; padding: 12px 18px; text-align: center;">
+                    <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #00f2fe; font-weight: 600;">ACTIVE DEFENSE MODE</div>
+                    <div style="font-size: 18px; font-weight: 800; color: #ffffff; margin-top: 2px;">TRI-VECTOR XAI</div>
+                </div>
             </div>
-            <div class="hud-subtitle">
-                TRI-VECTOR ANALYSIS: LINGUISTIC PHISHING // PROMOTIONAL SPAM // MULTI-LINK STRUCTURAL ANOMALIES
+        </div>
+    """, unsafe_allow_html=True)
+
+    # 3 Standout Feature Cards
+    st.markdown("""
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-title"><span>🔗</span> 1. Multi-Link Extractor</div>
+                <div class="feature-desc">Automatically parses every embedded link, defanging obfuscations and scoring 20+ lexical anomalies.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title"><span>🎯</span> 2. Combined Threat Matrix</div>
+                <div class="feature-desc">Combines text spam, phishing intent, and URL risks into a weighted composite score with safety overrides.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title"><span>💡</span> 3. Explainable AI (XAI)</div>
+                <div class="feature-desc">Breaks down exact token attributions and domain red flags (IP hosts, TLD abuse, subdomain nesting).</div>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
     # Simulation preset selector
     selected_sample = st.selectbox(
-        "⚡ Quick-Load Threat Injection Scenario:",
+        "⚡ Quick-Load Attack Simulation Preset:",
         list(SAMPLE_EMAILS.keys())
     )
     default_subj = SAMPLE_EMAILS[selected_sample]["subject"]
@@ -410,27 +489,27 @@ if nav_option == "🛡️ Cyber Threat Scanner":
     default_body = SAMPLE_EMAILS[selected_sample]["body"]
 
     with st.form("cyber_scan_form"):
-        col_m1, col_m2 = st.columns([1, 1])
+        col_m1, col_m2 = st.columns(2)
         with col_m1:
-            input_sender = st.text_input("Origin Header / Sender Address:", value=default_sender, placeholder="e.g., auth@security-portal.xyz")
+            input_sender = st.text_input("Origin Header / Sender Address:", value=default_sender, placeholder="e.g., billing@security-portal.xyz")
         with col_m2:
-            input_subject = st.text_input("Message Subject Line:", value=default_subj, placeholder="e.g., URGENT: Credentials Suspended")
+            input_subject = st.text_input("Subject Line:", value=default_subj, placeholder="e.g., URGENT: Credentials Suspended")
             
         input_body = st.text_area(
-            "Raw Payload / Email Content (Plaintext or HTML):",
+            "Email Payload (Plaintext or HTML):",
             value=default_body,
-            height=220,
-            placeholder="Paste raw email body or MIME payload here..."
+            height=200,
+            placeholder="Paste email text or raw MIME content here..."
         )
         
         scan_btn = st.form_submit_button("⚡ EXECUTE MULTI-VECTOR THREAT AUDIT", use_container_width=True)
 
     if scan_btn:
         if not input_body.strip():
-            st.warning("⚠️ No email payload provided. Enter content or select a preset scenario.")
+            st.warning("⚠️ Please provide email content to analyze.")
         else:
-            with st.spinner("Decoding payload, extracting embedded hyperlinks, running TF-IDF models..."):
-                # 1. Feature 1: Extract All Embedded URLs
+            with st.spinner("Executing tri-vector neural & heuristic scan..."):
+                # 1. Feature 1: Embedded URLs
                 found_urls = extract_urls(input_body)
                 
                 # 2. Text Classification
@@ -476,202 +555,188 @@ if nav_option == "🛡️ Cyber Threat Scanner":
                 }
                 save_scan(scan_record, url_eval_results)
 
-            # --- COMBINED THREAT REPORT HUD BANNER ---
             st.markdown("---")
             threat_level = report["threat_level"]
             
             if threat_level == "CRITICAL":
-                banner_class = "threat-banner-critical"
+                banner_class = "alert-banner-critical"
                 icon = "🚨"
-                verdict_color = "#ff0055"
+                accent_color = "#ff0055"
             elif threat_level in ("HIGH", "MEDIUM"):
-                banner_class = "threat-banner-high"
+                banner_class = "alert-banner-amber"
                 icon = "⚠️"
-                verdict_color = "#f59e0b"
+                accent_color = "#f59e0b"
             else:
-                banner_class = "threat-banner-clean"
+                banner_class = "alert-banner-clean"
                 icon = "✅"
-                verdict_color = "#00ff88"
+                accent_color = "#10b981"
 
+            # Executive Threat Banner
             st.markdown(f"""
                 <div class="{banner_class}">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <div>
-                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {verdict_color}; letter-spacing: 2px;">
-                                // FORENSIC VERDICT // STATUS: {threat_level}
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {accent_color}; font-weight: 700; letter-spacing: 1.5px;">
+                                // THREAT ASSESSMENT // VERDICT: {threat_level}
                             </div>
-                            <div style="font-size: 24px; font-weight: 800; color: #ffffff; margin-top: 4px;">
+                            <div style="font-size: 22px; font-weight: 800; color: #ffffff; margin-top: 4px;">
                                 {icon} {report["verdict"]}
                             </div>
                         </div>
-                        <div style="text-align: right; margin-top: 8px;">
-                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">COMPOSITE RISK INDEX</div>
-                            <div style="font-size: 32px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {verdict_color};">
+                        <div style="text-align: right;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">COMPOSITE RISK SCORE</div>
+                            <div style="font-size: 34px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {accent_color};">
                                 {report['scores']['composite_percent']}%
                             </div>
                         </div>
                     </div>
                     <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 14px; color: #e2e8f0;">
-                        <strong>DEFENSIVE ACTION PROTOCOL:</strong> {report["action_advice"]}
+                        <strong>DEFENSIVE GUIDANCE:</strong> {report["action_advice"]}
                     </div>
                 </div>
             """, unsafe_allow_html=True)
 
-            # Four Cyber Score Cards
-            sc1, sc2, sc3, sc4 = st.columns(4)
-            with sc1:
+            # Four High-Tech KPI Cards
+            k1, k2, k3, k4 = st.columns(4)
+            with k1:
                 st.markdown(f"""
-                    <div class="cyber-card">
-                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">COMPOSITE THREAT</div>
-                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: {verdict_color}; margin-top: 6px;">
-                            {report['scores']['composite_percent']}%
-                        </div>
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Overall Attack Potential</div>
+                    <div class="kpi-card" style="border-left: 3px solid {accent_color};">
+                        <div class="kpi-title">Composite Risk</div>
+                        <div class="kpi-value" style="color: {accent_color};">{report['scores']['composite_percent']}%</div>
+                        <div class="kpi-sub">Unified Multi-Vector Hazard</div>
                     </div>
                 """, unsafe_allow_html=True)
-            with sc2:
+            with k2:
                 st.markdown(f"""
-                    <div class="cyber-card">
-                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">PHISHING INTENT</div>
-                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #00f2fe; margin-top: 6px;">
-                            {round(report['scores']['phishing_score'] * 100, 1)}%
-                        </div>
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">TF-IDF + Logistic Reg</div>
+                    <div class="kpi-card" style="border-left: 3px solid #00f2fe;">
+                        <div class="kpi-title">Phishing Intent</div>
+                        <div class="kpi-value" style="color: #00f2fe;">{round(report['scores']['phishing_score'] * 100, 1)}%</div>
+                        <div class="kpi-sub">TF-IDF + Logistic Regression</div>
                     </div>
                 """, unsafe_allow_html=True)
-            with sc3:
+            with k3:
                 st.markdown(f"""
-                    <div class="cyber-card">
-                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">BULK SPAM INDEX</div>
-                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #f59e0b; margin-top: 6px;">
-                            {round(report['scores']['spam_score'] * 100, 1)}%
-                        </div>
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">TF-IDF + Naive Bayes</div>
+                    <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
+                        <div class="kpi-title">Spam Index</div>
+                        <div class="kpi-value" style="color: #f59e0b;">{round(report['scores']['spam_score'] * 100, 1)}%</div>
+                        <div class="kpi-sub">TF-IDF + Naive Bayes</div>
                     </div>
                 """, unsafe_allow_html=True)
-            with sc4:
+            with k4:
+                url_color = "#ff0055" if report['scores']['url_max_score'] >= 0.5 else "#10b981"
                 st.markdown(f"""
-                    <div class="cyber-card">
-                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">MAX EMBEDDED URL RISK</div>
-                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: {'#ff0055' if report['scores']['url_max_score']>=0.5 else '#00ff88'}; margin-top: 6px;">
-                            {round(report['scores']['url_max_score'] * 100, 1)}%
-                        </div>
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">{report['num_urls']} Hyperlinks Analyzed</div>
+                    <div class="kpi-card" style="border-left: 3px solid {url_color};">
+                        <div class="kpi-title">Max URL Risk</div>
+                        <div class="kpi-value" style="color: {url_color};">{round(report['scores']['url_max_score'] * 100, 1)}%</div>
+                        <div class="kpi-sub">{report['num_urls']} Hyperlinks Analyzed</div>
                     </div>
                 """, unsafe_allow_html=True)
 
-            # --- STANDOUT FEATURE 1: EMBEDDED URL TACTICAL AUDIT ---
+            # Feature 1: Embedded URLs
             st.markdown("---")
             st.markdown(f"""
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
-                        🔗 EMBEDDED HYPERLINK DOSSIER ({report['num_urls']} LINKS DETECTED)
-                    </div>
-                    <span class="badge-mono badge-cyan">Feature 1 // Multi-Link Deep Audit</span>
+                <div style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 12px;">
+                    🔗 Embedded Hyperlink Forensic Dossier ({report['num_urls']} Links Detected)
                 </div>
             """, unsafe_allow_html=True)
 
             if report["num_urls"] == 0:
-                st.info("No embedded URLs located in the payload.")
+                st.info("No embedded URLs were located in this message.")
             else:
                 for idx, u in enumerate(url_eval_results, start=1):
                     risk_pct = round(u['risk_score'] * 100, 1)
                     is_susp = u['is_suspicious']
-                    card_border = "rgba(255, 0, 85, 0.4)" if is_susp else "rgba(0, 255, 136, 0.3)"
-                    badge_markup = '<span class="badge-mono badge-critical">MALICIOUS</span>' if is_susp else '<span class="badge-mono badge-safe">CLEAN</span>'
+                    badge = "🚨 MALICIOUS" if is_susp else "✅ CLEAN"
                     
-                    with st.expander(f"Link #{idx} // [{risk_pct}% RISK] {u['url']}", expanded=is_susp):
-                        col_u1, col_u2 = st.columns([1, 2])
-                        with col_u1:
-                            st.markdown(f"**Status:** {badge_markup}", unsafe_allow_html=True)
-                            st.markdown(f"**Risk Score:** `{risk_pct}%`")
-                            st.markdown(f"**Target URL:** `{u['url']}`")
-                        with col_u2:
-                            st.markdown("**Structural & Lexical Flags Detected:**")
+                    with st.expander(f"Link #{idx} // [{risk_pct}% Risk] {u['url']}", expanded=is_susp):
+                        u1, u2 = st.columns([1, 2])
+                        with u1:
+                            st.write(f"**Status:** `{badge}`")
+                            st.write(f"**Risk Score:** `{risk_pct}%`")
+                            st.write(f"**URL:** `{u['url']}`")
+                        with u2:
+                            st.write("**Detected Structural & Lexical Anomalies:**")
                             if u["reasons"]:
                                 for r in u["reasons"]:
-                                    st.markdown(f"- ⚠️ **Flag:** {r}")
+                                    st.write(f"- ⚠️ **Flag:** {r}")
                             else:
-                                st.markdown("- ✅ *Passed all standard lexical filters (no suspicious TLD, no IP hostname, standard entropy).*")
+                                st.write("- ✅ *Passed all standard lexical checks (clean domain, standard port, normal entropy).*")
 
-            # --- STANDOUT FEATURE 3: EXPLAINABLE AI (XAI) PANEL ---
+            # Feature 3: Explainable AI (XAI)
             st.markdown("---")
             st.markdown("""
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
-                        💡 EXPLAINABLE AI (XAI): NEURAL & STATISTICAL ATTRIBUTION
-                    </div>
-                    <span class="badge-mono badge-cyan">Feature 3 // Feature-Based Explainability</span>
+                <div style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 12px;">
+                    💡 Explainable AI (XAI): Linguistic & Structural Evidence
                 </div>
             """, unsafe_allow_html=True)
 
-            xai_tab1, xai_tab2, xai_tab3 = st.tabs([
-                "🎣 Phishing Drivers (Logistic Regression Weights)",
-                "📧 Spam Triggers (Naive Bayes Log-Odds)",
-                "🌐 Lexical & Domain Anomaly Indicators"
+            xai1, xai2, xai3 = st.tabs([
+                "🎣 Phishing Evidence (Logistic Regression)",
+                "📧 Spam Triggers (Naive Bayes)",
+                "🌐 URL Anomaly Breakdown"
             ])
 
-            with xai_tab1:
+            with xai1:
                 st.caption(f"Reasoning: {report['explainability']['text_analysis']['phish_summary']}")
-                col_pt1, col_pt2 = st.columns(2)
-                with col_pt1:
+                p1, p2 = st.columns(2)
+                with p1:
                     st.markdown("##### 🚨 Top Phishing Contributors (Positive Weights)")
                     pt = report["explainability"]["text_analysis"]["phish_triggers"]
                     if pt:
                         for item in pt:
                             st.markdown(f"""
-                                <div style="display: flex; justify-content: space-between; background: rgba(255,0,85,0.08); border-left: 3px solid #ff0055; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #ff0055; font-weight: bold;">+{item['weight']}</span>
+                                <div style="display:flex; justify-content:space-between; background:rgba(255,0,85,0.08); border-left:3px solid #ff0055; padding:6px 12px; margin-bottom:6px; border-radius:4px;">
+                                    <span style="font-family:'JetBrains Mono'; color:#fff;">{item['token']}</span>
+                                    <span style="font-family:'JetBrains Mono'; color:#ff0055; font-weight:bold;">+{item['weight']}</span>
                                 </div>
                             """, unsafe_allow_html=True)
                     else:
                         st.caption("No significant phishing n-grams detected.")
-                with col_pt2:
-                    st.markdown("##### 🛡️ Top Benign Indicators (Negative Weights)")
+                with p2:
+                    st.markdown("##### 🛡️ Top Legitimate Indicators (Negative Weights)")
                     si = report["explainability"]["text_analysis"]["safe_indicators"]
                     if si:
                         for item in si:
                             st.markdown(f"""
-                                <div style="display: flex; justify-content: space-between; background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #00ff88; font-weight: bold;">-{item['weight']}</span>
+                                <div style="display:flex; justify-content:space-between; background:rgba(16,185,129,0.08); border-left:3px solid #10b981; padding:6px 12px; margin-bottom:6px; border-radius:4px;">
+                                    <span style="font-family:'JetBrains Mono'; color:#fff;">{item['token']}</span>
+                                    <span style="font-family:'JetBrains Mono'; color:#10b981; font-weight:bold;">-{item['weight']}</span>
                                 </div>
                             """, unsafe_allow_html=True)
                     else:
                         st.caption("No strong legitimate tokens countered the classification.")
 
-            with xai_tab2:
+            with xai2:
                 st.caption(f"Reasoning: {report['explainability']['text_analysis']['spam_summary']}")
-                col_st1, col_st2 = st.columns(2)
-                with col_st1:
-                    st.markdown("##### 📢 Promotional Spam Tokens (Log-Odds)")
+                s1, s2 = st.columns(2)
+                with s1:
+                    st.markdown("##### 📢 Promotional Spam Vocabulary (Log-Odds)")
                     st_trig = report["explainability"]["text_analysis"]["spam_triggers"]
                     if st_trig:
                         for item in st_trig:
                             st.markdown(f"""
-                                <div style="display: flex; justify-content: space-between; background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #f59e0b; font-weight: bold;">Δ {item['weight']}</span>
+                                <div style="display:flex; justify-content:space-between; background:rgba(245,158,11,0.08); border-left:3px solid #f59e0b; padding:6px 12px; margin-bottom:6px; border-radius:4px;">
+                                    <span style="font-family:'JetBrains Mono'; color:#fff;">{item['token']}</span>
+                                    <span style="font-family:'JetBrains Mono'; color:#f59e0b; font-weight:bold;">Δ {item['weight']}</span>
                                 </div>
                             """, unsafe_allow_html=True)
                     else:
                         st.caption("No active promotional vocabulary triggers found.")
-                with col_st2:
-                    st.markdown("##### 💬 Standard Correlated Ham Vocabulary")
+                with s2:
+                    st.markdown("##### 💬 Normal Ham Vocabulary")
                     ham_ind = report["explainability"]["text_analysis"]["ham_indicators"]
                     if ham_ind:
                         for item in ham_ind:
                             st.markdown(f"""
-                                <div style="display: flex; justify-content: space-between; background: rgba(0,242,254,0.08); border-left: 3px solid #00f2fe; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
-                                    <span style="font-family: 'JetBrains Mono', monospace; color: #00f2fe; font-weight: bold;">{item['weight']}</span>
+                                <div style="display:flex; justify-content:space-between; background:rgba(0,242,254,0.08); border-left:3px solid #00f2fe; padding:6px 12px; margin-bottom:6px; border-radius:4px;">
+                                    <span style="font-family:'JetBrains Mono'; color:#fff;">{item['token']}</span>
+                                    <span style="font-family:'JetBrains Mono'; color:#00f2fe; font-weight:bold;">{item['weight']}</span>
                                 </div>
                             """, unsafe_allow_html=True)
                     else:
                         st.caption("No strong ham indicators found.")
 
-            with xai_tab3:
+            with xai3:
                 u_break = report["explainability"]["url_analysis"]["url_breakdown"]
                 if not u_break:
                     st.info("No URLs to explain.")
@@ -686,9 +751,13 @@ if nav_option == "🛡️ Cyber Threat Scanner":
 # ---------------------------------------------------------
 elif nav_option == "🔗 Tactical URL Matrix":
     st.markdown("""
-        <div class="hud-header">
-            <div class="hud-title"><span>🔗</span> STANDALONE URL THREAT MATRIX</div>
-            <div class="hud-subtitle">EXTRACTS 20+ LEXICAL, STRUCTURAL & SHANNON ENTROPY ANOMALIES IN REAL-TIME</div>
+        <div class="hero-box">
+            <h2 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0;">
+                🔗 Standalone URL Forensic Matrix
+            </h2>
+            <p style="color: #94a3b8; font-size: 13px; margin: 6px 0 0 0;">
+                Extracts 20+ lexical, structural, and Shannon entropy indicators from standalone URLs in real time.
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -700,7 +769,7 @@ elif nav_option == "🔗 Tactical URL Matrix":
 
     if st.button("PROBE URL MATRIX", use_container_width=True):
         if not target_url.strip():
-            st.warning("Please supply a URL string.")
+            st.warning("Please supply a URL.")
         else:
             with st.spinner("Extracting structural features and scoring heuristic weights..."):
                 u_res = url_detector.predict_url(target_url.strip())
@@ -712,31 +781,31 @@ elif nav_option == "🔗 Tactical URL Matrix":
             c_u1, c_u2 = st.columns([1, 2])
             with c_u1:
                 st.markdown(f"""
-                    <div class="cyber-card" style="text-align: center;">
-                        <div style="font-size: 12px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">CALCULATED MALICIOUS PROBABILITY</div>
-                        <div style="font-size: 42px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {'#ff0055' if is_susp else '#00ff88'}; margin: 12px 0;">
+                    <div class="kpi-card" style="text-align: center; padding: 24px;">
+                        <div class="kpi-title">MALICIOUS PROBABILITY</div>
+                        <div style="font-size: 42px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {'#ff0055' if is_susp else '#10b981'}; margin: 12px 0;">
                             {risk_pct}%
                         </div>
-                        <div>
-                            {'<span class="badge-mono badge-critical">THREAT VERDICT: MALICIOUS</span>' if is_susp else '<span class="badge-mono badge-safe">THREAT VERDICT: BENIGN</span>'}
+                        <div style="font-family: 'JetBrains Mono'; font-size: 12px; font-weight: 700; color: {'#ff0055' if is_susp else '#10b981'};">
+                            {'🚨 VERDICT: MALICIOUS' if is_susp else '✅ VERDICT: BENIGN'}
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
 
             with c_u2:
-                st.markdown("### 🚩 Heuristic Anomaly Indicators")
+                st.markdown("### 🚩 Detected Heuristic Anomalies")
                 if u_res["reasons"]:
                     for r in u_res["reasons"]:
                         st.markdown(f"""
-                            <div style="background: rgba(255,0,85,0.08); border-left: 3px solid #ff0055; padding: 10px 14px; margin-bottom: 8px; border-radius: 4px; font-family: 'Space Grotesk', sans-serif;">
+                            <div style="background: rgba(255,0,85,0.08); border-left: 3px solid #ff0055; padding: 10px 14px; margin-bottom: 8px; border-radius: 4px;">
                                 ⚠️ {r}
                             </div>
                         """, unsafe_allow_html=True)
                 else:
-                    st.success("✅ Clean URL. No abnormal domain structures, ports, or deceptive markers found.")
+                    st.success("✅ Clean URL. Passed all standard lexical checks.")
 
             st.markdown("---")
-            st.subheader("📊 20 Granular Lexical & Structural Metrics")
+            st.subheader("📊 20 Granular Structural Metrics")
             df_feat = pd.DataFrame(list(f_dict.items()), columns=["Metric Key", "Computed Value"])
             st.dataframe(df_feat, use_container_width=True)
 
@@ -745,9 +814,13 @@ elif nav_option == "🔗 Tactical URL Matrix":
 # ---------------------------------------------------------
 elif nav_option == "⚖️ Model Benchmarking (ML)":
     st.markdown("""
-        <div class="hud-header">
-            <div class="hud-title"><span>⚖️</span> ALGORITHM BENCHMARK & COMPARISON</div>
-            <div class="hud-subtitle">TF-IDF VECTORIZATION // MULTINOMIAL NAIVE BAYES VS. LOGISTIC REGRESSION // CONFUSION MATRICES</div>
+        <div class="hero-box">
+            <h2 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0;">
+                ⚖️ Algorithm Benchmark & Comparison
+            </h2>
+            <p style="color: #94a3b8; font-size: 13px; margin: 6px 0 0 0;">
+                TF-IDF Vectorization // Multinomial Naive Bayes vs. Logistic Regression // Confusion Matrices
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -777,14 +850,13 @@ elif nav_option == "⚖️ Model Benchmarking (ML)":
 
     if "benchmark_results" in st.session_state:
         res = st.session_state["benchmark_results"]
-        st.success(f"Benchmarked successfully on **{res['task_name']}**! ({res['dataset_size']} total samples, {res['train_size']} train, {res['test_size']} test).")
+        st.success(f"Benchmarked successfully on **{res['task_name']}**! ({res['dataset_size']} total samples).")
 
-        # Metric KPI cards
         col_nb, col_lr = st.columns(2)
         with col_nb:
             st.markdown(f"""
-                <div class="cyber-card" style="border-top: 3px solid #00f2fe;">
-                    <div style="font-size: 16px; font-weight: 700; color: #00f2fe; margin-bottom: 10px;">MULTINOMIAL NAIVE BAYES</div>
+                <div class="kpi-card" style="border-top: 3px solid #00f2fe;">
+                    <div style="font-size: 15px; font-weight: 700; color: #00f2fe; margin-bottom: 8px;">MULTINOMIAL NAIVE BAYES</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <div><span style="color:#94a3b8; font-size:12px;">Accuracy:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['accuracy']*100:.1f}%</span></div>
                         <div><span style="color:#94a3b8; font-size:12px;">F1-Score:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['f1_score']*100:.1f}%</span></div>
@@ -796,8 +868,8 @@ elif nav_option == "⚖️ Model Benchmarking (ML)":
 
         with col_lr:
             st.markdown(f"""
-                <div class="cyber-card" style="border-top: 3px solid #00ff88;">
-                    <div style="font-size: 16px; font-weight: 700; color: #00ff88; margin-bottom: 10px;">LOGISTIC REGRESSION</div>
+                <div class="kpi-card" style="border-top: 3px solid #10b981;">
+                    <div style="font-size: 15px; font-weight: 700; color: #10b981; margin-bottom: 8px;">LOGISTIC REGRESSION</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <div><span style="color:#94a3b8; font-size:12px;">Accuracy:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['accuracy']*100:.1f}%</span></div>
                         <div><span style="color:#94a3b8; font-size:12px;">F1-Score:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['f1_score']*100:.1f}%</span></div>
@@ -815,7 +887,7 @@ elif nav_option == "⚖️ Model Benchmarking (ML)":
         st.markdown("---")
         st.subheader("🧪 Live Comparative Inference Prompt")
         test_input = st.text_input(
-            "Enter live sentence to test on both models:",
+            "Enter sentence to test on both models:",
             value="URGENT: Your bank account was locked due to security anomalies. Re-verify password immediately.",
             key="bench_test_cyber"
         )
@@ -844,9 +916,13 @@ elif nav_option == "⚖️ Model Benchmarking (ML)":
 # ---------------------------------------------------------
 elif nav_option == "📊 SQLite Forensic Logs":
     st.markdown("""
-        <div class="hud-header">
-            <div class="hud-title"><span>📊</span> SQLITE FORENSIC AUDIT TRAILS</div>
-            <div class="hud-subtitle">RELATIONAL RECORD STORE // SCAN REPLAY & HISTORICAL ANOMALY TRACKING</div>
+        <div class="hero-box">
+            <h2 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0;">
+                📊 SQLite Forensic Audit Trails
+            </h2>
+            <p style="color: #94a3b8; font-size: 13px; margin: 6px 0 0 0;">
+                Relational record store for past threat scans, extracted links, and audit history.
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -891,9 +967,10 @@ elif nav_option == "📊 SQLite Forensic Logs":
 # ---------------------------------------------------------
 elif nav_option == "⚙️ Architecture Specs":
     st.markdown("""
-        <div class="hud-header">
-            <div class="hud-title"><span>⚙️</span> SYSTEM ARCHITECTURE SPECIFICATIONS</div>
-            <div class="hud-subtitle">AUTONOMOUS CYBER DEFENSE PIPELINE SPECIFICATION</div>
+        <div class="hero-box">
+            <h2 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0;">
+                ⚙️ System Architecture & Technology Specifications
+            </h2>
         </div>
     """, unsafe_allow_html=True)
 
