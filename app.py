@@ -26,17 +26,239 @@ from models.model_comparison import train_and_compare_models
 
 # Page Config
 st.set_page_config(
-    page_title="PhishGuard AI - Unified Threat & Phishing Defense",
+    page_title="PHISHGUARD // CYBER THREAT RADAR",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+# ---------------------------------------------------------
+# FUTURISTIC CYBERPUNK / SOC COMMAND STYLING (CSS INJECTION)
+# ---------------------------------------------------------
+FUTURISTIC_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+/* Global Reset & Futuristic Dark Palette */
+:root {
+    --bg-primary: #070b14;
+    --bg-secondary: #0d1527;
+    --bg-glass: rgba(13, 21, 39, 0.7);
+    --border-cyan: rgba(0, 242, 254, 0.25);
+    --neon-cyan: #00f2fe;
+    --neon-blue: #4facfe;
+    --neon-red: #ff0055;
+    --neon-amber: #f59e0b;
+    --neon-green: #00ff88;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+}
+
+/* Background canvas */
+.stApp {
+    background: radial-gradient(circle at 10% 20%, #0d1527 0%, #070b14 70%, #03060a 100%) !important;
+    font-family: 'Space Grotesk', -apple-system, sans-serif !important;
+    color: var(--text-primary) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #070b14;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+    border: 1px solid var(--border-cyan);
+}
+
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background: rgba(10, 16, 30, 0.95) !important;
+    border-right: 1px solid rgba(0, 242, 254, 0.15) !important;
+    backdrop-filter: blur(16px);
+}
+
+/* Futuristic HUD Header */
+.hud-header {
+    background: linear-gradient(90deg, rgba(0, 242, 254, 0.08) 0%, rgba(79, 172, 254, 0.03) 100%);
+    border: 1px solid var(--border-cyan);
+    border-left: 4px solid var(--neon-cyan);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.08);
+}
+.hud-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.hud-subtitle {
+    font-size: 13px;
+    color: var(--neon-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* Pulsing Online Radar Dot */
+.pulse-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+}
+
+/* Glassmorphism Metric Cards */
+.cyber-card {
+    background: rgba(13, 21, 39, 0.75);
+    border: 1px solid rgba(0, 242, 254, 0.18);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+}
+.cyber-card:hover {
+    border-color: rgba(0, 242, 254, 0.45);
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Threat Status Banners */
+.threat-banner-critical {
+    background: linear-gradient(135deg, rgba(255, 0, 85, 0.18) 0%, rgba(255, 0, 85, 0.05) 100%);
+    border: 1px solid rgba(255, 0, 85, 0.5);
+    border-left: 6px solid #ff0055;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);
+    margin-bottom: 24px;
+}
+.threat-banner-high {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0.05) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    border-left: 6px solid #f59e0b;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+    margin-bottom: 24px;
+}
+.threat-banner-clean {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 255, 136, 0.03) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    border-left: 6px solid #00ff88;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+    margin-bottom: 24px;
+}
+
+/* Monospace Chip Badges */
+.badge-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+.badge-critical {
+    background: rgba(255, 0, 85, 0.15);
+    color: #ff3377;
+    border: 1px solid rgba(255, 0, 85, 0.4);
+}
+.badge-safe {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.4);
+}
+.badge-amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.badge-cyan {
+    background: rgba(0, 242, 254, 0.15);
+    color: #00f2fe;
+    border: 1px solid rgba(0, 242, 254, 0.4);
+}
+
+/* Custom Styled Buttons */
+.stButton>button {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%) !important;
+    color: #050a15 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px 24px !important;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+.stButton>button:hover {
+    box-shadow: 0 0 35px rgba(0, 242, 254, 0.6) !important;
+    transform: scale(1.02) !important;
+    color: #000000 !important;
+}
+
+/* Form Inputs */
+.stTextInput>div>div>input, .stTextArea>div>div>textarea {
+    background: rgba(13, 21, 39, 0.8) !important;
+    border: 1px solid rgba(0, 242, 254, 0.2) !important;
+    color: #f1f5f9 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    border-radius: 6px !important;
+}
+.stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25) !important;
+}
+
+/* Metric text enhancements */
+[data-testid="stMetricValue"] {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+}
+[data-testid="stMetricLabel"] {
+    font-family: 'Space Grotesk', sans-serif !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: var(--text-secondary) !important;
+}
+</style>
+"""
+st.markdown(FUTURISTIC_CSS, unsafe_allow_html=True)
+
 # Initialize DB and Models
 @st.cache_resource
 def load_models():
     init_db()
-    # Check if models exist, if not, train default seeds
     if not (config.SPAM_MODEL_PATH.exists() and config.PHISHING_MODEL_PATH.exists() and config.URL_MODEL_PATH.exists()):
         train_and_save_all_models()
         
@@ -51,137 +273,164 @@ except Exception as e:
     st.error(f"Error initializing models: {e}")
     st.stop()
 
-# Sample Email Templates for Quick Testing
+# Cyber-Themed Sample Scenarios
 SAMPLE_EMAILS = {
-    "Select a pre-configured sample...": {
+    "Select an attack simulation scenario...": {
         "subject": "",
         "sender": "",
         "body": ""
     },
-    "🚨 Phishing with 5 Embedded Links (Invoice Fraud)": {
-        "subject": "URGENT: Outstanding Invoice Overdue - Immediate Payment Required",
-        "sender": "accounts-billing@secure-corporate-notifications.xyz",
-        "body": """Dear Customer,
+    "🚨 Weaponized Invoice Fraud (5 Embedded Links / IP Host)": {
+        "subject": "CRITICAL: Corporate Invoice #INV-9942 Overdue - Immediate Account Suspension",
+        "sender": "sec-billing@enterprise-notifications-update.xyz",
+        "body": """CONFIDENTIAL SECURITY NOTICE // CORP BILLING
 
-Your corporate subscription account has been temporarily suspended due to 2 failed billing attempts for Invoice #98412 ($2,450.00).
+Your corporate SaaS enterprise subscription has been quarantined due to 2 failed credit settlements for Invoice #INV-9942 ($2,450.00).
 
-To prevent permanent account termination and legal escalation within 24 hours, you must verify your identity and settle the invoice immediately:
+To abort complete token revocation and legal compliance escalation within 24 hours, authenticate your credential profile and confirm transaction details immediately:
 
-1. Review detailed invoice breakdown: http://192.168.1.105/billing/invoice-98412.pdf
-2. Authenticate your billing profile: https://secure-login.paypal.com.account-update.xyz/signin
-3. Update corporate credit card: http://billing-portal-update.buzz/auth?token=92841
-4. Contact verified support desk: https://www.google.com/search?q=corporate+billing
-5. Read payment policy: https://en.wikipedia.org/wiki/Invoice
+1. Review raw invoice audit PDF: http://192.168.1.105/billing/invoice-98412.pdf
+2. Verify administrative corporate profile: https://secure-login.paypal.com.account-update.xyz/signin
+3. Re-enter root credit card authentication token: http://billing-portal-update.buzz/auth?token=92841
+4. Inspect corporate directory support: https://www.google.com/search?q=corporate+billing
+5. Review digital transaction treaty: https://en.wikipedia.org/wiki/Invoice
 
-If you do not confirm within 24 hours, your access will be permanently locked.
+Failure to confirm within 24 hours will trigger irreversible credential purge.
 
-Regards,
-Corporate Billing Dept."""
+Operations Security Dept // Cyber Defense Division"""
     },
-    "📧 Promotional Spam (Cash Prize / Lottery)": {
-        "subject": "CONGRATULATIONS! You won $1,000,000 in International Cash Sweepstakes!",
-        "sender": "rewards@lucky-winner-draw2026.net",
-        "body": """CONGRATULATIONS!
+    "📢 Mass Bulk Spam (Cryptocurrency & Cash Prize Scheme)": {
+        "subject": "CONGRATULATIONS! $1,000,000 USD International Crypto Lottery Granted!",
+        "sender": "rewards@lucky-draw-bitcoin2026.net",
+        "body": """CONGRATULATIONS WINNER!
 
-You have been selected as our lucky first prize winner of $1,000,000 USD in our yearly cash lottery sweepstakes!
-This exclusive payout is guaranteed with no risk.
+You have been selected as the prime recipient of $1,000,000 USD in our automated cryptographic lottery draw!
+This exclusive jackpot is guaranteed with zero risk and instantaneous blockchain payout.
 
-To claim your prize, send your full bank routing numbers, passport copy and full address.
-Act now! This limited time offer expires in 48 hours.
+To claim your allocation, transmit full bank wire routing numbers, identity passport, and mailing address.
+ACT NOW! This time-gated promotional window expires in 48 hours.
 
-Click here to register your prize: http://claim-cash-bonus.party/winner"""
+Register claim code: http://claim-cash-bonus.party/winner"""
     },
-    "✅ Legitimate Team Update (Safe with Benign Links)": {
-        "subject": "Sprint Retrospective Notes and Next Iteration Goals",
+    "🛡️ Verified Corporate Transmission (Benign + Safe Links)": {
+        "subject": "Sprint 44 Engineering Review & Architecture Roadmap",
         "sender": "sarah.jenkins@company-tech.org",
         "body": """Hi Team,
 
-Great job on concluding Sprint 42! We successfully closed 18 feature tickets and resolved our open staging bugs.
+Great execution on finalizing Sprint 44 milestones. We have closed 19 pull requests and optimized the ingestion worker throughput by 32%.
 
-Please review the retro meeting notes here: https://github.com/torvalds/linux
-You can check out the new design system guidelines on our portal: https://docs.python.org/3/library/urllib.parse.html
+Please inspect the architecture diagrams here: https://github.com/torvalds/linux
+You can also reference the revised parsing specification: https://docs.python.org/3/library/urllib.parse.html
 
-Let's do our planning session tomorrow at 10:00 AM.
+Our strategy briefing will occur tomorrow at 10:00 AM UTC.
 
 Best regards,
 Sarah Jenkins
-Lead Engineering Manager"""
+Lead Infrastructure Architect"""
     },
-    "⚠️ Subtle Credential Phishing (Clean Text + Obfuscated Link)": {
-        "subject": "Please review the updated employee handbook",
+    "⚠️ Stealth Social Engineering (Clean Lure + Obfuscated Auth URL)": {
+        "subject": "Mandatory Q4 Compensation Adjustment & Employee Handbook",
         "sender": "human-resources@mycompany-internal.com",
-        "body": """Good morning,
+        "body": """Team Members,
 
-We have updated the internal HR safety guidelines and vacation policy for the upcoming quarter.
-All team members are requested to review the document and electronically sign:
+Executive leadership has released the revised Q4 compensation matrices and health insurance policy updates.
+Every employee is requested to review the documentation and acknowledge signature:
 
-Access Document: http://user:pass@employee-handbook-docusign.top/portal/auth
+Review Document: http://user:pass@employee-handbook-docusign.top/portal/auth
 
-Thank you for your cooperation,
-Human Resources"""
+Thank you for your timely attention,
+Human Resources Division"""
     }
 }
 
-# Sidebar Navigation & Stats
+# Sidebar - SOC Command Avionics
 with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/shield.png", width=64)
-    st.title("PhishGuard AI")
-    st.caption("Multi-Vector Email & URL Threat Analyzer")
-    st.markdown("---")
+    st.markdown("""
+        <div style="text-align: center; padding: 10px 0 16px 0;">
+            <div style="font-size: 38px;">🛡️</div>
+            <div style="font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #00f2fe; margin-top: 4px;">PHISHGUARD AI</div>
+            <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #64748b; letter-spacing: 1px;">AUTONOMOUS THREAT RADAR v2.4</div>
+        </div>
+    """, unsafe_allow_html=True)
     
+    st.markdown("""
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); border-radius: 6px; padding: 8px 12px; margin-bottom: 16px;">
+            <span class="pulse-indicator"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00ff88; font-weight: 600;">SOC NODE ONLINE // ACTIVE</span>
+        </div>
+    """, unsafe_allow_html=True)
+
     nav_option = st.radio(
-        "Navigation",
-        ["🛡️ Email Threat Scanner", "🔗 Direct URL Scanner", "⚖️ Model Training & Comparison", "📊 SQLite History & Logs", "⚙️ Tech Stack & Specs"]
+        "OPERATIONAL COMMAND",
+        [
+            "🛡️ Cyber Threat Scanner",
+            "🔗 Tactical URL Matrix",
+            "⚖️ Model Benchmarking (ML)",
+            "📊 SQLite Forensic Logs",
+            "⚙️ Architecture Specs"
+        ]
     )
     
     st.markdown("---")
-    st.subheader("System Telemetry")
+    st.markdown("<div style='font-family: \"JetBrains Mono\", monospace; font-size: 12px; color: #00f2fe; margin-bottom: 8px;'>TELEMETRY COUNTERS</div>", unsafe_allow_html=True)
     stats = get_system_stats()
-    col_s1, col_s2 = st.columns(2)
-    col_s1.metric("Total Scans", stats["total_scans"])
-    col_s2.metric("Phishing Alerts", stats["phishing_count"])
-    col_s3, col_s4 = st.columns(2)
-    col_s3.metric("Spam Caught", stats["spam_count"])
-    col_s4.metric("Malicious URLs", stats["malicious_urls"])
+    c_s1, c_s2 = st.columns(2)
+    c_s1.metric("Scans Logged", stats["total_scans"])
+    c_s2.metric("Threats Quarantined", stats["phishing_count"])
+    c_s3, c_s4 = st.columns(2)
+    c_s3.metric("Spam Trapped", stats["spam_count"])
+    c_s4.metric("Malicious URLs", stats["malicious_urls"])
+
+    st.markdown("---")
+    st.caption("Engine: TF-IDF + Naive Bayes + Logistic Regression + Random Forest + XAI Attribution")
 
 # ---------------------------------------------------------
-# VIEW 1: EMAIL THREAT SCANNER
+# VIEW 1: CYBER THREAT SCANNER
 # ---------------------------------------------------------
-if nav_option == "🛡️ Email Threat Scanner":
-    st.title("🛡️ Unified Email Threat & Phishing Detection")
-    st.markdown(
-        "Analyzes raw emails across three vectors: **Text Spam (Naive Bayes)**, "
-        "**Credential Phishing (Logistic Regression)**, and **Embedded Link Features (ML & Heuristics)**."
+if nav_option == "🛡️ Cyber Threat Scanner":
+    # Futuristic HUD Banner
+    st.markdown(f"""
+        <div class="hud-header">
+            <div class="hud-title">
+                <span>🛡️</span> EMAIL THREAT DETECTION & COMBINED FORENSICS
+            </div>
+            <div class="hud-subtitle">
+                TRI-VECTOR ANALYSIS: LINGUISTIC PHISHING // PROMOTIONAL SPAM // MULTI-LINK STRUCTURAL ANOMALIES
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Simulation preset selector
+    selected_sample = st.selectbox(
+        "⚡ Quick-Load Threat Injection Scenario:",
+        list(SAMPLE_EMAILS.keys())
     )
-
-    # Sample Selector
-    selected_sample = st.selectbox("Quick-Load Sample Email Scenario:", list(SAMPLE_EMAILS.keys()))
     default_subj = SAMPLE_EMAILS[selected_sample]["subject"]
     default_sender = SAMPLE_EMAILS[selected_sample]["sender"]
     default_body = SAMPLE_EMAILS[selected_sample]["body"]
 
-    with st.form("scan_form"):
-        col_meta1, col_meta2 = st.columns(2)
-        with col_meta1:
-            input_sender = st.text_input("Sender Email / Header:", value=default_sender, placeholder="e.g. security-alert@paypal-update.com")
-        with col_meta2:
-            input_subject = st.text_input("Subject Line:", value=default_subj, placeholder="e.g. Urgent: Account Verification Required")
+    with st.form("cyber_scan_form"):
+        col_m1, col_m2 = st.columns([1, 1])
+        with col_m1:
+            input_sender = st.text_input("Origin Header / Sender Address:", value=default_sender, placeholder="e.g., auth@security-portal.xyz")
+        with col_m2:
+            input_subject = st.text_input("Message Subject Line:", value=default_subj, placeholder="e.g., URGENT: Credentials Suspended")
             
         input_body = st.text_area(
-            "Email Body (Plaintext or HTML):",
+            "Raw Payload / Email Content (Plaintext or HTML):",
             value=default_body,
-            height=200,
-            placeholder="Paste raw email content or HTML message here..."
+            height=220,
+            placeholder="Paste raw email body or MIME payload here..."
         )
         
-        submitted = st.form_submit_button("🔍 Run Multi-Vector Threat Analysis", use_container_width=True)
+        scan_btn = st.form_submit_button("⚡ EXECUTE MULTI-VECTOR THREAT AUDIT", use_container_width=True)
 
-    if submitted:
+    if scan_btn:
         if not input_body.strip():
-            st.warning("Please provide email body text to analyze.")
+            st.warning("⚠️ No email payload provided. Enter content or select a preset scenario.")
         else:
-            with st.spinner("Analyzing message vectors and extracting embedded URLs..."):
-                # 1. Feature 1: Embedded URL Extraction
+            with st.spinner("Decoding payload, extracting embedded hyperlinks, running TF-IDF models..."):
+                # 1. Feature 1: Extract All Embedded URLs
                 found_urls = extract_urls(input_body)
                 
                 # 2. Text Classification
@@ -199,7 +448,7 @@ if nav_option == "🛡️ Email Threat Scanner":
                     u_res = url_detector.predict_url(u)
                     url_eval_results.append(u_res)
                     
-                # 5. Feature 2: Combined Threat Report Synthesis
+                # 5. Feature 2: Threat Aggregator
                 report = synthesize_threat_report(
                     subject=input_subject,
                     sender=input_sender,
@@ -211,7 +460,7 @@ if nav_option == "🛡️ Email Threat Scanner":
                     phish_exp=phish_exp
                 )
                 
-                # 6. Storage in SQLite
+                # 6. SQLite Logging
                 scan_record = {
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "subject": input_subject,
@@ -227,205 +476,289 @@ if nav_option == "🛡️ Email Threat Scanner":
                 }
                 save_scan(scan_record, url_eval_results)
 
-            st.success("Analysis Complete! Threat assessment rendered below.")
-            
-            # --- EXECUTIVE SUMMARY CARD ---
+            # --- COMBINED THREAT REPORT HUD BANNER ---
             st.markdown("---")
-            st.subheader("🎯 Combined Threat Report")
+            threat_level = report["threat_level"]
             
-            # Color-coded Banner based on threat level
-            threat_color_map = {
-                "CRITICAL": "#ff4b4b",
-                "HIGH": "#ff7846",
-                "MEDIUM": "#ffa500",
-                "LOW": "#28a745"
-            }
-            border_color = threat_color_map.get(report["threat_level"], "#333")
-            
-            st.markdown(
-                f"""
-                <div style="padding: 18px; border-radius: 8px; border-left: 8px solid {border_color}; background-color: rgba(255, 255, 255, 0.05); margin-bottom: 20px;">
-                    <div style="font-size: 22px; font-weight: bold; color: {border_color};">
-                        {report["verdict"]}
+            if threat_level == "CRITICAL":
+                banner_class = "threat-banner-critical"
+                icon = "🚨"
+                verdict_color = "#ff0055"
+            elif threat_level in ("HIGH", "MEDIUM"):
+                banner_class = "threat-banner-high"
+                icon = "⚠️"
+                verdict_color = "#f59e0b"
+            else:
+                banner_class = "threat-banner-clean"
+                icon = "✅"
+                verdict_color = "#00ff88"
+
+            st.markdown(f"""
+                <div class="{banner_class}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <div>
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {verdict_color}; letter-spacing: 2px;">
+                                // FORENSIC VERDICT // STATUS: {threat_level}
+                            </div>
+                            <div style="font-size: 24px; font-weight: 800; color: #ffffff; margin-top: 4px;">
+                                {icon} {report["verdict"]}
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 8px;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">COMPOSITE RISK INDEX</div>
+                            <div style="font-size: 32px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {verdict_color};">
+                                {report['scores']['composite_percent']}%
+                            </div>
+                        </div>
                     </div>
-                    <div style="font-size: 15px; margin-top: 8px;">
-                        <strong>Action Guidance:</strong> {report["action_advice"]}
+                    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 14px; color: #e2e8f0;">
+                        <strong>DEFENSIVE ACTION PROTOCOL:</strong> {report["action_advice"]}
                     </div>
                 </div>
-                """,
-                unsafe_allow_html=True
-            )
+            """, unsafe_allow_html=True)
 
-            # Metric Score Columns
-            m1, m2, m3, m4 = st.columns(4)
-            m1.metric("Composite Risk Score", f"{report['scores']['composite_percent']}%", delta=report["threat_level"], delta_color="inverse")
-            m2.metric("Phishing Probability", f"{round(report['scores']['phishing_score'] * 100, 1)}%", help="TF-IDF + Logistic Regression")
-            m3.metric("Spam Probability", f"{round(report['scores']['spam_score'] * 100, 1)}%", help="TF-IDF + Naive Bayes")
-            m4.metric("Max URL Threat", f"{round(report['scores']['url_max_score'] * 100, 1)}%", f"{report['num_urls']} Links Found", delta_color="inverse")
+            # Four Cyber Score Cards
+            sc1, sc2, sc3, sc4 = st.columns(4)
+            with sc1:
+                st.markdown(f"""
+                    <div class="cyber-card">
+                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">COMPOSITE THREAT</div>
+                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: {verdict_color}; margin-top: 6px;">
+                            {report['scores']['composite_percent']}%
+                        </div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Overall Attack Potential</div>
+                    </div>
+                """, unsafe_allow_html=True)
+            with sc2:
+                st.markdown(f"""
+                    <div class="cyber-card">
+                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">PHISHING INTENT</div>
+                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #00f2fe; margin-top: 6px;">
+                            {round(report['scores']['phishing_score'] * 100, 1)}%
+                        </div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">TF-IDF + Logistic Reg</div>
+                    </div>
+                """, unsafe_allow_html=True)
+            with sc3:
+                st.markdown(f"""
+                    <div class="cyber-card">
+                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">BULK SPAM INDEX</div>
+                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #f59e0b; margin-top: 6px;">
+                            {round(report['scores']['spam_score'] * 100, 1)}%
+                        </div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">TF-IDF + Naive Bayes</div>
+                    </div>
+                """, unsafe_allow_html=True)
+            with sc4:
+                st.markdown(f"""
+                    <div class="cyber-card">
+                        <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">MAX EMBEDDED URL RISK</div>
+                        <div style="font-size: 26px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: {'#ff0055' if report['scores']['url_max_score']>=0.5 else '#00ff88'}; margin-top: 6px;">
+                            {round(report['scores']['url_max_score'] * 100, 1)}%
+                        </div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">{report['num_urls']} Hyperlinks Analyzed</div>
+                    </div>
+                """, unsafe_allow_html=True)
 
-            # --- STANDOUT FEATURE 1: EMBEDDED URL EXTRACTION & ANALYSIS ---
+            # --- STANDOUT FEATURE 1: EMBEDDED URL TACTICAL AUDIT ---
             st.markdown("---")
-            st.subheader(f"🔗 Embedded URL Extraction ({report['num_urls']} Links Analyzed)")
-            
+            st.markdown(f"""
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
+                        🔗 EMBEDDED HYPERLINK DOSSIER ({report['num_urls']} LINKS DETECTED)
+                    </div>
+                    <span class="badge-mono badge-cyan">Feature 1 // Multi-Link Deep Audit</span>
+                </div>
+            """, unsafe_allow_html=True)
+
             if report["num_urls"] == 0:
-                st.info("No embedded web links detected in this message body.")
+                st.info("No embedded URLs located in the payload.")
             else:
-                st.write("All embedded links in the message were automatically parsed, defanged, and evaluated against lexical and structural indicators:")
-                
-                url_table_data = []
                 for idx, u in enumerate(url_eval_results, start=1):
-                    url_table_data.append({
-                        "#": idx,
-                        "URL": u["url"],
-                        "Risk Score": f"{round(u['risk_score'] * 100, 1)}%",
-                        "Status": "🚨 SUSPICIOUS" if u["is_suspicious"] else "✅ CLEAN",
-                        "Red Flags Count": len(u["reasons"])
-                    })
-                st.dataframe(pd.DataFrame(url_table_data), use_container_width=True)
-                
-                # Detailed Expander per link
-                with st.expander("🔍 Inspect Deep Structural Flags for Each Embedded Link"):
-                    for idx, u in enumerate(url_eval_results, start=1):
-                        st.markdown(f"**Link #{idx}:** `{u['url']}`")
-                        if u["reasons"]:
-                            for r in u["reasons"]:
-                                st.markdown(f"- ⚠️ **Flag:** {r}")
-                        else:
-                            st.markdown("- ✅ *Passed all standard lexical checks (clean domain structure, standard port, no obfuscations).*")
-                        st.markdown("---")
+                    risk_pct = round(u['risk_score'] * 100, 1)
+                    is_susp = u['is_suspicious']
+                    card_border = "rgba(255, 0, 85, 0.4)" if is_susp else "rgba(0, 255, 136, 0.3)"
+                    badge_markup = '<span class="badge-mono badge-critical">MALICIOUS</span>' if is_susp else '<span class="badge-mono badge-safe">CLEAN</span>'
+                    
+                    with st.expander(f"Link #{idx} // [{risk_pct}% RISK] {u['url']}", expanded=is_susp):
+                        col_u1, col_u2 = st.columns([1, 2])
+                        with col_u1:
+                            st.markdown(f"**Status:** {badge_markup}", unsafe_allow_html=True)
+                            st.markdown(f"**Risk Score:** `{risk_pct}%`")
+                            st.markdown(f"**Target URL:** `{u['url']}`")
+                        with col_u2:
+                            st.markdown("**Structural & Lexical Flags Detected:**")
+                            if u["reasons"]:
+                                for r in u["reasons"]:
+                                    st.markdown(f"- ⚠️ **Flag:** {r}")
+                            else:
+                                st.markdown("- ✅ *Passed all standard lexical filters (no suspicious TLD, no IP hostname, standard entropy).*")
 
             # --- STANDOUT FEATURE 3: EXPLAINABLE AI (XAI) PANEL ---
             st.markdown("---")
-            st.subheader("💡 Explainable AI (XAI): Threat Drivers & Feature Contributions")
-            st.write("Understand the specific linguistic triggers and heuristic signals that influenced each model's prediction:")
+            st.markdown("""
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
+                        💡 EXPLAINABLE AI (XAI): NEURAL & STATISTICAL ATTRIBUTION
+                    </div>
+                    <span class="badge-mono badge-cyan">Feature 3 // Feature-Based Explainability</span>
+                </div>
+            """, unsafe_allow_html=True)
 
-            tab_xai1, tab_xai2, tab_xai3 = st.tabs([
-                "🎣 Phishing Linguistic Drivers (Logistic Regression)",
-                "📧 Spam Triggers (Naive Bayes)",
-                "🌐 URL Lexical & Heuristic Explanations"
+            xai_tab1, xai_tab2, xai_tab3 = st.tabs([
+                "🎣 Phishing Drivers (Logistic Regression Weights)",
+                "📧 Spam Triggers (Naive Bayes Log-Odds)",
+                "🌐 Lexical & Domain Anomaly Indicators"
             ])
 
-            with tab_xai1:
-                st.markdown(f"**Executive Phishing Assessment:** {report['explainability']['text_analysis']['phish_summary']}")
+            with xai_tab1:
+                st.caption(f"Reasoning: {report['explainability']['text_analysis']['phish_summary']}")
                 col_pt1, col_pt2 = st.columns(2)
-                
                 with col_pt1:
                     st.markdown("##### 🚨 Top Phishing Contributors (Positive Weights)")
                     pt = report["explainability"]["text_analysis"]["phish_triggers"]
                     if pt:
-                        df_pt = pd.DataFrame(pt)
-                        df_pt.columns = ["Token / N-Gram", "Impact Weight (w_i * tfidf)"]
-                        st.table(df_pt)
+                        for item in pt:
+                            st.markdown(f"""
+                                <div style="display: flex; justify-content: space-between; background: rgba(255,0,85,0.08); border-left: 3px solid #ff0055; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #ff0055; font-weight: bold;">+{item['weight']}</span>
+                                </div>
+                            """, unsafe_allow_html=True)
                     else:
                         st.caption("No significant phishing n-grams detected.")
-
                 with col_pt2:
-                    st.markdown("##### 🛡️ Top Legitimate Indicators (Negative Weights)")
+                    st.markdown("##### 🛡️ Top Benign Indicators (Negative Weights)")
                     si = report["explainability"]["text_analysis"]["safe_indicators"]
                     if si:
-                        df_si = pd.DataFrame(si)
-                        df_si.columns = ["Token / N-Gram", "Impact Weight"]
-                        st.table(df_si)
+                        for item in si:
+                            st.markdown(f"""
+                                <div style="display: flex; justify-content: space-between; background: rgba(0,255,136,0.08); border-left: 3px solid #00ff88; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #00ff88; font-weight: bold;">-{item['weight']}</span>
+                                </div>
+                            """, unsafe_allow_html=True)
                     else:
                         st.caption("No strong legitimate tokens countered the classification.")
 
-            with tab_xai2:
-                st.markdown(f"**Executive Spam Assessment:** {report['explainability']['text_analysis']['spam_summary']}")
+            with xai_tab2:
+                st.caption(f"Reasoning: {report['explainability']['text_analysis']['spam_summary']}")
                 col_st1, col_st2 = st.columns(2)
-                
                 with col_st1:
-                    st.markdown("##### 📢 Promotional / Spam Triggers (Log-Odds Ratio)")
+                    st.markdown("##### 📢 Promotional Spam Tokens (Log-Odds)")
                     st_trig = report["explainability"]["text_analysis"]["spam_triggers"]
                     if st_trig:
-                        df_st = pd.DataFrame(st_trig)
-                        df_st.columns = ["Spam Token", "Log-Odds Difference"]
-                        st.table(df_st)
+                        for item in st_trig:
+                            st.markdown(f"""
+                                <div style="display: flex; justify-content: space-between; background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #f59e0b; font-weight: bold;">Δ {item['weight']}</span>
+                                </div>
+                            """, unsafe_allow_html=True)
                     else:
-                        st.caption("No active spam vocabulary triggers found.")
-                        
+                        st.caption("No active promotional vocabulary triggers found.")
                 with col_st2:
-                    st.markdown("##### 💬 Normal / Ham Vocabulary Tokens")
+                    st.markdown("##### 💬 Standard Correlated Ham Vocabulary")
                     ham_ind = report["explainability"]["text_analysis"]["ham_indicators"]
                     if ham_ind:
-                        df_ham = pd.DataFrame(ham_ind)
-                        df_ham.columns = ["Ham Token", "Relative Association"]
-                        st.table(df_ham)
+                        for item in ham_ind:
+                            st.markdown(f"""
+                                <div style="display: flex; justify-content: space-between; background: rgba(0,242,254,0.08); border-left: 3px solid #00f2fe; padding: 6px 12px; margin-bottom: 6px; border-radius: 4px;">
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #fff;">{item['token']}</span>
+                                    <span style="font-family: 'JetBrains Mono', monospace; color: #00f2fe; font-weight: bold;">{item['weight']}</span>
+                                </div>
+                            """, unsafe_allow_html=True)
                     else:
                         st.caption("No strong ham indicators found.")
 
-            with tab_xai3:
-                st.markdown("##### 🌐 Structural & Lexical URL Risk Analysis")
+            with xai_tab3:
                 u_break = report["explainability"]["url_analysis"]["url_breakdown"]
                 if not u_break:
                     st.info("No URLs to explain.")
                 else:
                     for item in u_break:
-                        st.markdown(f"**URL:** `{item['url']}` (Risk: `{round(item['risk_score']*100, 1)}%`)")
+                        st.markdown(f"**Link:** `{item['url']}` (Risk: `{round(item['risk_score']*100, 1)}%`)")
                         for reason in item["reasons"]:
                             st.write(f"- {reason}")
 
 # ---------------------------------------------------------
-# VIEW 2: DIRECT URL SCANNER
+# VIEW 2: TACTICAL URL MATRIX
 # ---------------------------------------------------------
-elif nav_option == "🔗 Direct URL Scanner":
-    st.title("🔗 Dedicated URL Feature & Heuristic Analyzer")
-    st.write("Scan standalone URLs to extract 20+ lexical, structural, and behavioral threat features in real-time.")
+elif nav_option == "🔗 Tactical URL Matrix":
+    st.markdown("""
+        <div class="hud-header">
+            <div class="hud-title"><span>🔗</span> STANDALONE URL THREAT MATRIX</div>
+            <div class="hud-subtitle">EXTRACTS 20+ LEXICAL, STRUCTURAL & SHANNON ENTROPY ANOMALIES IN REAL-TIME</div>
+        </div>
+    """, unsafe_allow_html=True)
 
     target_url = st.text_input(
-        "Enter Target URL:",
+        "Enter Target URL to Probe:",
         value="http://192.168.1.100/paypal-security/login.php?cmd=verify",
-        placeholder="https://example.com/login"
+        placeholder="https://suspicious-domain.xyz/auth"
     )
 
-    if st.button("Analyze URL Features", use_container_width=True):
+    if st.button("PROBE URL MATRIX", use_container_width=True):
         if not target_url.strip():
-            st.warning("Please provide a URL.")
+            st.warning("Please supply a URL string.")
         else:
-            with st.spinner("Analyzing URL features..."):
+            with st.spinner("Extracting structural features and scoring heuristic weights..."):
                 u_res = url_detector.predict_url(target_url.strip())
                 f_dict = extract_url_feature_dict(target_url.strip())
                 
-            st.markdown("---")
-            u_col1, u_col2 = st.columns([1, 2])
-            with u_col1:
-                st.metric("Malicious Risk Probability", f"{round(u_res['risk_score'] * 100, 1)}%")
-                if u_res["is_suspicious"]:
-                    st.error("🚨 VERDICT: SUSPICIOUS / MALICIOUS URL")
-                else:
-                    st.success("✅ VERDICT: LOW RISK / BENIGN URL")
-                    
-            with u_col2:
-                st.subheader("🚩 Detected Anomaly Warnings")
+            risk_pct = round(u_res['risk_score'] * 100, 1)
+            is_susp = u_res["is_suspicious"]
+            
+            c_u1, c_u2 = st.columns([1, 2])
+            with c_u1:
+                st.markdown(f"""
+                    <div class="cyber-card" style="text-align: center;">
+                        <div style="font-size: 12px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">CALCULATED MALICIOUS PROBABILITY</div>
+                        <div style="font-size: 42px; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: {'#ff0055' if is_susp else '#00ff88'}; margin: 12px 0;">
+                            {risk_pct}%
+                        </div>
+                        <div>
+                            {'<span class="badge-mono badge-critical">THREAT VERDICT: MALICIOUS</span>' if is_susp else '<span class="badge-mono badge-safe">THREAT VERDICT: BENIGN</span>'}
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+
+            with c_u2:
+                st.markdown("### 🚩 Heuristic Anomaly Indicators")
                 if u_res["reasons"]:
                     for r in u_res["reasons"]:
-                        st.warning(f"⚠️ {r}")
+                        st.markdown(f"""
+                            <div style="background: rgba(255,0,85,0.08); border-left: 3px solid #ff0055; padding: 10px 14px; margin-bottom: 8px; border-radius: 4px; font-family: 'Space Grotesk', sans-serif;">
+                                ⚠️ {r}
+                            </div>
+                        """, unsafe_allow_html=True)
                 else:
-                    st.info("No suspicious lexical patterns or structural red-flags detected.")
+                    st.success("✅ Clean URL. No abnormal domain structures, ports, or deceptive markers found.")
 
             st.markdown("---")
-            st.subheader("📊 Extracted 20 Lexical & Structural Features")
-            df_feat = pd.DataFrame(list(f_dict.items()), columns=["Feature Name", "Extracted Value"])
+            st.subheader("📊 20 Granular Lexical & Structural Metrics")
+            df_feat = pd.DataFrame(list(f_dict.items()), columns=["Metric Key", "Computed Value"])
             st.dataframe(df_feat, use_container_width=True)
 
 # ---------------------------------------------------------
-# VIEW: MODEL TRAINING & BENCHMARKING
+# VIEW 3: MODEL BENCHMARKING (ML)
 # ---------------------------------------------------------
-elif nav_option == "⚖️ Model Training & Comparison":
-    st.title("⚖️ Model Training & Algorithm Benchmarking")
-    st.markdown(
-        "Train, evaluate, and compare **Multinomial Naive Bayes** and **Logistic Regression** "
-        "using **TF-IDF Vectorization** on labeled ground-truth datasets. Evaluate on Accuracy, Precision, Recall, "
-        "F1-score, and Confusion Matrices."
-    )
+elif nav_option == "⚖️ Model Benchmarking (ML)":
+    st.markdown("""
+        <div class="hud-header">
+            <div class="hud-title"><span>⚖️</span> ALGORITHM BENCHMARK & COMPARISON</div>
+            <div class="hud-subtitle">TF-IDF VECTORIZATION // MULTINOMIAL NAIVE BAYES VS. LOGISTIC REGRESSION // CONFUSION MATRICES</div>
+        </div>
+    """, unsafe_allow_html=True)
 
     col_t1, col_t2 = st.columns([2, 1])
     with col_t1:
         task_choice = st.selectbox(
-            "Select Evaluation Task & Labeled Dataset:",
+            "Select Benchmark Dataset:",
             ["Spam Detection (Spam vs Ham)", "Email Phishing Detection (Phishing vs Legitimate)"]
         )
     with col_t2:
-        test_split = st.slider("Test Set Split Ratio:", min_value=0.15, max_value=0.40, value=0.25, step=0.05)
+        test_split = st.slider("Train/Test Split:", min_value=0.15, max_value=0.40, value=0.25, step=0.05)
 
     dataset_map = {
         "Spam Detection (Spam vs Ham)": config.BASE_DIR / "data" / "spam_dataset.csv",
@@ -433,8 +766,8 @@ elif nav_option == "⚖️ Model Training & Comparison":
     }
     target_csv = dataset_map[task_choice]
 
-    if st.button("🚀 Train & Compare Models", use_container_width=True):
-        with st.spinner("Vectorizing text with TF-IDF, training classifiers, and computing confusion matrices..."):
+    if st.button("🚀 EXECUTE MODEL BENCHMARK", use_container_width=True):
+        with st.spinner("Extracting TF-IDF features, training models, and generating confusion matrices..."):
             results = train_and_compare_models(
                 csv_path=target_csv,
                 task_name=task_choice,
@@ -444,51 +777,47 @@ elif nav_option == "⚖️ Model Training & Comparison":
 
     if "benchmark_results" in st.session_state:
         res = st.session_state["benchmark_results"]
-        st.success(f"Benchmark completed on **{res['task_name']}**! (Total: {res['dataset_size']} samples, Train: {res['train_size']}, Test: {res['test_size']})")
+        st.success(f"Benchmarked successfully on **{res['task_name']}**! ({res['dataset_size']} total samples, {res['train_size']} train, {res['test_size']} test).")
 
-        # 1. METRIC COMPARISON TABLE
-        st.subheader("📋 Evaluation Metrics Comparison")
-        st.dataframe(res["comparison_table"], use_container_width=True)
-
-        # 2. SIDE BY SIDE KPI CARDS
-        st.markdown("---")
-        st.subheader("🎯 Side-by-Side Performance Comparison")
+        # Metric KPI cards
         col_nb, col_lr = st.columns(2)
-        
         with col_nb:
-            st.markdown("#### 🔵 Multinomial Naive Bayes (TF-IDF)")
-            k1, k2 = st.columns(2)
-            k1.metric("Accuracy", f"{res['naive_bayes']['accuracy'] * 100:.1f}%")
-            k2.metric("F1-Score", f"{res['naive_bayes']['f1_score'] * 100:.1f}%")
-            k3, k4 = st.columns(2)
-            k3.metric("Precision", f"{res['naive_bayes']['precision'] * 100:.1f}%")
-            k4.metric("Recall", f"{res['naive_bayes']['recall'] * 100:.1f}%")
+            st.markdown(f"""
+                <div class="cyber-card" style="border-top: 3px solid #00f2fe;">
+                    <div style="font-size: 16px; font-weight: 700; color: #00f2fe; margin-bottom: 10px;">MULTINOMIAL NAIVE BAYES</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div><span style="color:#94a3b8; font-size:12px;">Accuracy:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['accuracy']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">F1-Score:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['f1_score']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">Precision:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['precision']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">Recall:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['naive_bayes']['recall']*100:.1f}%</span></div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
 
         with col_lr:
-            st.markdown("#### 🟢 Logistic Regression (TF-IDF)")
-            l1, l2 = st.columns(2)
-            l1.metric("Accuracy", f"{res['logistic_regression']['accuracy'] * 100:.1f}%")
-            l2.metric("F1-Score", f"{res['logistic_regression']['f1_score'] * 100:.1f}%")
-            l3, l4 = st.columns(2)
-            l3.metric("Precision", f"{res['logistic_regression']['precision'] * 100:.1f}%")
-            l4.metric("Recall", f"{res['logistic_regression']['recall'] * 100:.1f}%")
+            st.markdown(f"""
+                <div class="cyber-card" style="border-top: 3px solid #00ff88;">
+                    <div style="font-size: 16px; font-weight: 700; color: #00ff88; margin-bottom: 10px;">LOGISTIC REGRESSION</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div><span style="color:#94a3b8; font-size:12px;">Accuracy:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['accuracy']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">F1-Score:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['f1_score']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">Precision:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['precision']*100:.1f}%</span></div>
+                        <div><span style="color:#94a3b8; font-size:12px;">Recall:</span> <span style="color:#fff; font-weight:700; font-family:'JetBrains Mono';">{res['logistic_regression']['recall']*100:.1f}%</span></div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
 
-        # 3. CONFUSION MATRIX VISUALIZATION
         st.markdown("---")
-        st.subheader("📊 Confusion Matrix Visualization")
-        st.write("Heatmap of True Negatives, False Positives, False Negatives, and True Positives:")
+        st.subheader("📊 Confusion Matrix Heatmaps (Side-by-Side)")
         if Path(res["confusion_matrix_image"]).exists():
             st.image(res["confusion_matrix_image"], use_column_width=True)
 
-        # 4. LIVE INFERENCE COMPARISON TOOL
         st.markdown("---")
-        st.subheader("🧪 Live Comparative Inference Test")
-        st.write("Test any custom message text on **both** models simultaneously to compare their probabilistic outputs:")
-        
+        st.subheader("🧪 Live Comparative Inference Prompt")
         test_input = st.text_input(
-            "Enter sentence to test:",
-            value="Urgent: Your account has been restricted. Confirm your login password within 24 hours.",
-            key="bench_test_input"
+            "Enter live sentence to test on both models:",
+            value="URGENT: Your bank account was locked due to security anomalies. Re-verify password immediately.",
+            key="bench_test_cyber"
         )
         if test_input:
             vec = res["vectorizer"]
@@ -498,98 +827,83 @@ elif nav_option == "⚖️ Model Training & Comparison":
 
             t_col1, t_col2 = st.columns(2)
             with t_col1:
-                st.metric("Naive Bayes Threat Probability", f"{nb_prob * 100:.1f}%")
+                st.metric("Naive Bayes Probability", f"{nb_prob * 100:.1f}%")
                 if nb_prob >= 0.5:
                     st.error("🚨 Naive Bayes: Malicious / Positive")
                 else:
                     st.success("✅ Naive Bayes: Safe / Negative")
             with t_col2:
-                st.metric("Logistic Regression Threat Probability", f"{lr_prob * 100:.1f}%")
+                st.metric("Logistic Regression Probability", f"{lr_prob * 100:.1f}%")
                 if lr_prob >= 0.5:
                     st.error("🚨 Logistic Regression: Malicious / Positive")
                 else:
                     st.success("✅ Logistic Regression: Safe / Negative")
 
 # ---------------------------------------------------------
-# VIEW 3: SQLITE HISTORY & LOGS
+# VIEW 4: SQLITE FORENSIC LOGS
 # ---------------------------------------------------------
-elif nav_option == "📊 SQLite History & Logs":
-    st.title("📊 Scan History & Security Logs (SQLite)")
-    st.write(f"Persistent audit database located at: `{config.DATABASE_PATH}`")
-    
+elif nav_option == "📊 SQLite Forensic Logs":
+    st.markdown("""
+        <div class="hud-header">
+            <div class="hud-title"><span>📊</span> SQLITE FORENSIC AUDIT TRAILS</div>
+            <div class="hud-subtitle">RELATIONAL RECORD STORE // SCAN REPLAY & HISTORICAL ANOMALY TRACKING</div>
+        </div>
+    """, unsafe_allow_html=True)
+
     col_h1, col_h2 = st.columns([3, 1])
     with col_h2:
-        if st.button("🗑️ Clear Scan History"):
+        if st.button("PURGE AUDIT HISTORY"):
             clear_all_history()
-            st.success("Database history wiped!")
+            st.success("Audit history purged.")
             st.rerun()
 
     scans = get_recent_scans(limit=100)
     if not scans:
-        st.info("No scans recorded yet. Run a scan from the 'Email Threat Scanner' tab.")
+        st.info("No recorded security scans found in SQLite database.")
     else:
-        df_scans = pd.DataFrame(scans)
-        st.dataframe(df_scans, use_container_width=True)
+        st.dataframe(pd.DataFrame(scans), use_container_width=True)
         
         st.markdown("---")
-        st.subheader("🔍 Inspect Detailed Scan Record")
+        st.subheader("🔍 Inspect Detailed Forensic Record")
         scan_ids = [s["id"] for s in scans]
         chosen_id = st.selectbox("Select Scan ID to Inspect:", scan_ids)
         
         details = get_scan_details(chosen_id)
         if details:
             st.json({
-                "ID": details["id"],
+                "Audit_ID": details["id"],
                 "Timestamp": details["timestamp"],
-                "Subject": details["subject"],
                 "Sender": details["sender"],
+                "Subject": details["subject"],
                 "Verdict": details["verdict"],
-                "Threat Level": details["threat_level"],
-                "Scores": {
-                    "Composite": details["composite_score"],
-                    "Phishing": details["phishing_score"],
-                    "Spam": details["spam_score"],
-                    "Max URL": details["url_max_score"]
+                "Threat_Level": details["threat_level"],
+                "Metrics": {
+                    "Composite_Risk": details["composite_score"],
+                    "Phishing_Score": details["phishing_score"],
+                    "Spam_Score": details["spam_score"],
+                    "Max_URL_Score": details["url_max_score"]
                 },
-                "Embedded URLs Found": details["urls"]
+                "Extracted_Links": details["urls"]
             })
 
 # ---------------------------------------------------------
-# VIEW 4: TECH STACK & SYSTEM ARCHITECTURE
+# VIEW 5: ARCHITECTURE SPECS
 # ---------------------------------------------------------
-elif nav_option == "⚙️ Tech Stack & Specs":
-    st.title("⚙️ System Architecture & Technology Specifications")
-    
+elif nav_option == "⚙️ Architecture Specs":
     st.markdown("""
-    ### 🧱 Technical Foundation
-    | Component | Technology / Implementation |
-    | :--- | :--- |
-    | **Frontend** | Streamlit (Interactive Multi-tab Interface) |
-    | **Backend** | Python 3.11+ |
-    | **Spam Detection** | TF-IDF Vectorizer + Multinomial Naive Bayes |
-    | **Email Phishing** | TF-IDF Vectorizer + Logistic Regression |
-    | **URL Threat Detection** | 20+ Structural & Lexical Feature Extraction + Random Forest ML |
-    | **Data Processing** | Pandas & NumPy |
-    | **Evaluation & Metrics** | Scikit-learn (`classification_report`, `accuracy`, `precision_recall_fscore`) |
-    | **Explainable AI (XAI)** | MultinomialNB log-odds, LogisticRegression linear weights & URL heuristic engine |
-    | **Data Persistence** | SQLite (`phish_guard.db`) with relational scan and URL history |
-    
-    ---
-    
-    ### 🌟 Core Differentiators & Standout Features
-    
-    #### 1. Embedded URL Extraction
-    - Parses both raw plaintext links, href attributes, and defanged URLs (`hxxp://`, `[.]`, etc.).
-    - Extracts all links even if an email embeds 5, 10, or more links.
-    - Evaluates each URL individually, extracting domain structures, subdomains, TLDs, and path entropy.
-    
-    #### 2. Combined Multi-Vector Threat Report
-    - A polite message body with a weaponized link is a phishing attack!
-    - Threat Aggregator synthesizes Text Spam ($P_{spam}$), Phishing Intent ($P_{phish}$), and Max URL Threat ($P_{url\_max}$).
-    - Enforces critical safety overrides so weaponized URLs escalate the entire message to **CRITICAL**.
-    
-    #### 3. Explainable AI (XAI)
-    - Demystifies the "black box":
-      - Pinpoints exact tokens driving the spam and phishing flags.
-      - Displays human-readable warnings for URL anomalies (e.g. raw IP address, typo-squatting hyphens, suspicious `.xyz` TLD).
+        <div class="hud-header">
+            <div class="hud-title"><span>⚙️</span> SYSTEM ARCHITECTURE SPECIFICATIONS</div>
+            <div class="hud-subtitle">AUTONOMOUS CYBER DEFENSE PIPELINE SPECIFICATION</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    ### 🛡️ Core Engine Architecture
+    * **Frontend:** Streamlit Cyber-SOC HUD Interface with dark glassmorphism & responsive telemetry.
+    * **Spam Filter:** TF-IDF n-grams (1, 2) + Multinomial Naive Bayes (Laplace smoothing).
+    * **Phishing Filter:** TF-IDF n-grams (1, 2) + Logistic Regression (L2 regularization).
+    * **URL Threat Analyzer:** 20-Feature structural/lexical extractor + Random Forest Classifier.
+    * **Aggregator & Override Engine:** Multi-vector composite scoring with hard-override escalation for weaponized links.
+    * **Explainability (XAI):** Linear model coefficient attributions ($w_i \cdot x_i$) & Naive Bayes log-odds difference.
+    * **Audit Store:** SQLite relational database (`phish_guard.db`).
     """)
