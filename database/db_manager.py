@@ -48,6 +48,22 @@ def init_db():
                 FOREIGN KEY (scan_id) REFERENCES scans (id) ON DELETE CASCADE
             )
         """)
+
+        # Table: fraud_reports (Reports escalated to Cyber Crime / Helpline 1930)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS fraud_reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                report_id TEXT NOT NULL UNIQUE,
+                timestamp TEXT NOT NULL,
+                sender TEXT,
+                subject TEXT,
+                message_snippet TEXT,
+                phishing_score REAL,
+                composite_score REAL,
+                reported_urls TEXT,
+                status TEXT
+            )
+        """)
         
         conn.commit()
 
@@ -163,13 +179,60 @@ def get_system_stats() -> Dict[str, Any]:
         
         cursor.execute("SELECT COUNT(*) AS malicious_urls FROM scan_urls WHERE is_suspicious = 1")
         malicious_urls = cursor.fetchone()["malicious_urls"]
+
+        cursor.execute("SELECT COUNT(*) AS total_reports FROM fraud_reports")
+        total_reports = cursor.fetchone()["total_reports"]
         
         return {
             "total_scans": total_scans,
             "phishing_count": phishing_count,
             "spam_count": spam_count,
-            "malicious_urls": malicious_urls
+            "malicious_urls": malicious_urls,
+            "total_reports": total_reports
         }
+
+def save_fraud_report(report_data: Dict[str, Any]) -> str:
+    """
+    Saves an escalated fraud report into SQLite with an incident docket ID.
+    Returns the generated report_id (e.g. CYBER-1930-XXXX).
+    """
+    init_db()
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        report_id = f"CYBER-1930-{int(datetime.utcnow().timestamp())}"
+        
+        cursor.execute("""
+            INSERT INTO fraud_reports (
+                report_id, timestamp, sender, subject, message_snippet,
+                phishing_score, composite_score, reported_urls, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            report_id,
+            report_data.get("timestamp", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")),
+            report_data.get("sender", "Unknown"),
+            report_data.get("subject", "No Subject"),
+            report_data.get("message_snippet", "")[:500],
+            float(report_data.get("phishing_score", 0.0)),
+            float(report_data.get("composite_score", 0.0)),
+            json.dumps(report_data.get("urls", [])),
+            report_data.get("status", "SUBMITTED_TO_LOCAL_AUDIT")
+        ))
+        conn.commit()
+        return report_id
+
+def get_fraud_reports(limit: int = 50) -> List[Dict[str, Any]]:
+    """Retrieves list of logged fraud incident reports."""
+    init_db()
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, report_id, timestamp, sender, subject, phishing_score, composite_score, status
+            FROM fraud_reports
+            ORDER BY id DESC
+            LIMIT ?
+        """, (limit,))
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
 
 def clear_all_history():
     """Wipes the database tables for testing or resetting."""

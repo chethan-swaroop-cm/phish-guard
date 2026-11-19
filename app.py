@@ -13,7 +13,8 @@ from datetime import datetime
 import json
 import config
 from database.db_manager import (
-    init_db, save_scan, get_recent_scans, get_scan_details, get_system_stats, clear_all_history
+    init_db, save_scan, get_recent_scans, get_scan_details, get_system_stats, clear_all_history,
+    save_fraud_report, get_fraud_reports
 )
 from utils.url_extractor import extract_urls
 from utils.feature_extraction import extract_url_feature_dict
@@ -316,6 +317,90 @@ try:
 except Exception as e:
     st.error(f"Error loading models: {e}")
     st.stop()
+
+# ---------------------------------------------------------
+# EMERGENCY CYBER CRIME MODAL DIALOG (HELPLINE 1930)
+# ---------------------------------------------------------
+@st.dialog("🚨 EMERGENCY CYBER CRIME ESCALATION // HELPLINE 1930")
+def show_cyber_crime_dialog(report_summary: dict, sender: str, subject: str, body: str, urls: list):
+    st.markdown("""
+        <div style="background: rgba(255, 0, 85, 0.12); border-left: 4px solid #ff0055; padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+            <div style="font-size: 16px; font-weight: 800; color: #ff0055;">⚠️ HIGH-SEVERITY PHISHING / FRAUD DETECTED (> 70%)</div>
+            <div style="font-size: 13px; color: #e2e8f0; margin-top: 4px;">
+                This communication has been assessed with over <strong>70% threat probability</strong>. You can report the suspicious sender and spam message directly to the National Cyber Crime Bureau.
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("#### 📞 1. Instant Phone App Escalation (Helpline 1930)")
+    st.write("Click below to open your phone app/dialer and immediately call the **National Cyber Crime Helpline (1930)**:")
+    st.markdown("""
+        <a href="tel:1930" style="
+            display: block;
+            text-align: center;
+            background: linear-gradient(90deg, #ff0055 0%, #ff4b4b 100%);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 16px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(255, 0, 85, 0.4);
+            margin-bottom: 16px;
+        ">
+            📞 CALL CYBER CRIME POLICE (1930) NOW
+        </a>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("#### 🏛️ 2. Official National Cyber Crime Reporting Portal")
+    st.markdown("""
+        <a href="https://cybercrime.gov.in/" target="_blank" style="
+            display: block;
+            text-align: center;
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid #00f2fe;
+            color: #00f2fe;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        ">
+            🌐 OPEN CYBERCRIME.GOV.IN (FILE ONLINE COMPLAINT)
+        </a>
+    """, unsafe_allow_html=True)
+
+    st.markdown("#### 📋 3. Pre-formatted Evidence Dossier")
+    st.write("Copy and paste this structured evidence when lodging your formal complaint:")
+    
+    url_formatted = "\\n  - ".join(urls) if urls else "None detected"
+    evidence_text = f"""INCIDENT REPORT // CYBER FRAUD EVIDENCE
+Date & Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} IST
+Reported Suspect Sender: {sender or 'Unknown Sender'}
+Subject Line: {subject or 'No Subject'}
+Assessed Threat Level: {report_summary.get('composite_percent', 0)}%
+Verdict: {report_summary.get('verdict', 'CRITICAL PHISHING')}
+Weaponized / Deceptive Links:
+  - {url_formatted}
+
+Extracted Email Payload:
+{body[:500]}
+"""
+    st.text_area("Evidence Text Box:", value=evidence_text, height=160)
+    
+    if st.button("💾 Log Incident in Local Police Audit Records", use_container_width=True):
+        docket_id = save_fraud_report({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "sender": sender,
+            "subject": subject,
+            "message_snippet": body[:500],
+            "phishing_score": report_summary.get("phishing_score", 0.0),
+            "composite_score": report_summary.get("composite_score", 0.0),
+            "urls": urls,
+            "status": "ESCALATED_TO_1930_HELPLINE"
+        })
+        st.success(f"✅ Fraud incident successfully archived! Reference Docket ID: **{docket_id}**")
 
 # Cyber-Themed Sample Scenarios
 SAMPLE_EMAILS = {
@@ -632,6 +717,46 @@ if nav_option == "🛡️ Email Threat Scanner":
                     </div>
                 """, unsafe_allow_html=True)
 
+            # --- EMERGENCY CYBER CRIME HELPLINE (1930) & FRAUD REPORTING TRIGGER (> 70%) ---
+            is_high_risk = (report['scores']['composite_percent'] >= 70.0) or (report['scores']['phishing_score'] >= 0.70)
+            if is_high_risk:
+                st.markdown("""
+                    <div style="background: linear-gradient(135deg, rgba(255, 0, 85, 0.22) 0%, rgba(30, 10, 20, 0.95) 100%); border: 2px solid #ff0055; border-radius: 12px; padding: 18px 22px; box-shadow: 0 0 30px rgba(255, 0, 85, 0.35); margin-top: 20px; margin-bottom: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <span style="background: #ff0055; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono';">CRITICAL FRAUD THRESHOLD EXCEEDED (> 70%)</span>
+                                <div style="font-size: 20px; font-weight: 800; color: #ffffff; margin-top: 6px;">
+                                    🚨 Cyber Crime Escalation Protocol Triggered
+                                </div>
+                                <div style="color: #cbd5e1; font-size: 13px; margin-top: 4px;">
+                                    This message exhibits aggressive social engineering or credential theft indicators. You can report this sender and dial the Cyber Police directly.
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 11px; color: #fecdd3; font-family: 'JetBrains Mono';">NATIONAL CYBER CRIME HELPLINE</div>
+                                <div style="font-size: 28px; font-weight: 900; color: #ff0055; font-family: 'JetBrains Mono';">DIAL 1930</div>
+                            </div>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+
+                col_esc1, col_esc2 = st.columns(2)
+                with col_esc1:
+                    st.markdown("""
+                        <a href="tel:1930" style="display: block; text-align: center; background: linear-gradient(90deg, #ff0055 0%, #ff4b4b 100%); color: #ffffff; font-weight: 800; font-size: 15px; padding: 12px 18px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);">
+                            📞 CALL CYBER CRIME POLICE (1930) NOW
+                        </a>
+                    """, unsafe_allow_html=True)
+                with col_esc2:
+                    if st.button("🚨 REPORT SENDER & OPEN COMPLAINT DOSSIER", use_container_width=True):
+                        show_cyber_crime_dialog(
+                            report_summary=report['scores'],
+                            sender=input_sender,
+                            subject=input_subject,
+                            body=input_body,
+                            urls=[u['url'] for u in url_eval_results]
+                        )
+
             # Feature 1: Embedded URLs
             st.markdown("---")
             st.markdown(f"""
@@ -933,34 +1058,45 @@ elif nav_option == "📊 SQLite Forensic Logs":
             st.success("Audit history purged.")
             st.rerun()
 
-    scans = get_recent_scans(limit=100)
-    if not scans:
-        st.info("No recorded security scans found in SQLite database.")
-    else:
-        st.dataframe(pd.DataFrame(scans), use_container_width=True)
-        
-        st.markdown("---")
-        st.subheader("🔍 Inspect Detailed Forensic Record")
-        scan_ids = [s["id"] for s in scans]
-        chosen_id = st.selectbox("Select Scan ID to Inspect:", scan_ids)
-        
-        details = get_scan_details(chosen_id)
-        if details:
-            st.json({
-                "Audit_ID": details["id"],
-                "Timestamp": details["timestamp"],
-                "Sender": details["sender"],
-                "Subject": details["subject"],
-                "Verdict": details["verdict"],
-                "Threat_Level": details["threat_level"],
-                "Metrics": {
-                    "Composite_Risk": details["composite_score"],
-                    "Phishing_Score": details["phishing_score"],
-                    "Spam_Score": details["spam_score"],
-                    "Max_URL_Score": details["url_max_score"]
-                },
-                "Extracted_Links": details["urls"]
-            })
+    tab_scans, tab_reports = st.tabs(["🔍 All Scans Audit Log", "🚨 Escalated Police Fraud Reports (1930)"])
+    
+    with tab_scans:
+        scans = get_recent_scans(limit=100)
+        if not scans:
+            st.info("No recorded security scans found in SQLite database.")
+        else:
+            st.dataframe(pd.DataFrame(scans), use_container_width=True)
+            
+            st.markdown("---")
+            st.subheader("🔍 Inspect Detailed Forensic Record")
+            scan_ids = [s["id"] for s in scans]
+            chosen_id = st.selectbox("Select Scan ID to Inspect:", scan_ids)
+            
+            details = get_scan_details(chosen_id)
+            if details:
+                st.json({
+                    "Audit_ID": details["id"],
+                    "Timestamp": details["timestamp"],
+                    "Sender": details["sender"],
+                    "Subject": details["subject"],
+                    "Verdict": details["verdict"],
+                    "Threat_Level": details["threat_level"],
+                    "Metrics": {
+                        "Composite_Risk": details["composite_score"],
+                        "Phishing_Score": details["phishing_score"],
+                        "Spam_Score": details["spam_score"],
+                        "Max_URL_Score": details["url_max_score"]
+                    },
+                    "Extracted_Links": details["urls"]
+                })
+
+    with tab_reports:
+        fraud_reps = get_fraud_reports(limit=50)
+        if not fraud_reps:
+            st.info("No fraud incidents have been escalated yet. Reports logged when threat level > 70% will appear here.")
+        else:
+            st.write("Formal incident complaints logged for Cyber Crime Police (Helpline 1930) reporting:")
+            st.dataframe(pd.DataFrame(fraud_reps), use_container_width=True)
 
 # ---------------------------------------------------------
 # VIEW 5: ARCHITECTURE SPECS
